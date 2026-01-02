@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Locket Gold Premium - Bản Quyền Vĩnh Viễn</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        gold: { 100:'#F9F1D8', 300:'#EAD485', 400:'#D4AF37', 500:'#C5A000', 600:'#997B00' },
+                        dark: { 900: '#0a0a0a', 800: '#121212', 700: '#1e1e1e' }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'fade-in': 'fadeIn 0.8s ease-out forwards',
+                        'pulse-gold': 'pulseGold 2s infinite',
+                    },
+                    keyframes: {
+                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-20px)' } },
+                        glow: { 'from': { boxShadow: '0 0 10px #D4AF37, 0 0 20px #D4AF37' }, 'to': { boxShadow: '0 0 20px #FFD700, 0 0 30px #FFD700' } },
+                        fadeIn: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+                        pulseGold: { '0%': { boxShadow: '0 0 0 0 rgba(212, 175, 55, 0.4)' }, '70%': { boxShadow: '0 0 0 10px rgba(212, 175, 55, 0)' }, '100%': { boxShadow: '0 0 0 0 rgba(212, 175, 55, 0)' } }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #050505; color: #ffffff; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        
+        .text-gradient-gold {
+            background: linear-gradient(to right, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+            text-shadow: 0px 0px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-gold {
+            background: linear-gradient(45deg, #D4AF37, #FFD700, #D4AF37);
+            background-size: 200% auto;
+            color: #000;
+            font-weight: 800;
+            transition: 0.5s;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none !important;
+        }
+        .btn-gold:hover {
+            background-position: right center;
+            transform: scale(1.02);
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.7);
+        }
+        .btn-gold:active { transform: scale(0.95); }
+
+        .glass-panel {
+            background: rgba(20, 20, 20, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+        .glass-panel:hover { border-color: rgba(255, 215, 0, 0.4); }
+
+        .input-gold {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: #fff;
+            transition: 0.3s;
+        }
+        .input-gold:focus {
+            outline: none;
+            border-color: #FFD700;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Support Buttons Fixed */
+        .support-fixed {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            gap: 15px;
+            flex-direction: column-reverse;
+        }
+        .support-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            text-decoration: none;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        .support-btn:hover { transform: scale(1.1); }
+        .bg-facebook { background: linear-gradient(45deg, #1877F2, #3b5998); }
+        .bg-zalo-white { background: white; padding: 2px; }
+
+        .section-view { display: none; animation: fadeIn 0.6s ease-out; }
+        .section-view.active { display: block; }
+        
+        #loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9000; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.5s; }
+        .spinner { width: 50px; height: 50px; border: 3px solid rgba(212, 175, 55, 0.3); border-radius: 50%; border-top-color: #D4AF37; animation: spin 1s ease-in-out infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .swal2-container { z-index: 20000 !important; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col relative font-sans">
+
+    <!-- Loading Screen -->
+    <div id="loading-overlay">
+        <div class="spinner mb-4"></div>
+        <div class="text-gold-400 font-bold tracking-widest text-sm uppercase" id="loading-text">Đang kết nối Server...</div>
+        <div id="error-message" class="hidden mt-6 text-center px-4 max-w-md">
+             <p class="text-white font-bold text-lg mb-2">CHƯA CẤU HÌNH DATABASE</p>
+             <button onclick="setupFirebaseUI()" class="btn-gold px-6 py-3 rounded-full text-sm">Cấu Hình Ngay</button>
+        </div>
+    </div>
+
+    <!-- Fixed Support Buttons -->
+    <div class="support-fixed">
+        <a href="https://zalo.me/0974784207" target="_blank" class="support-btn bg-zalo-white" title="Liên hệ Zalo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo" style="width: 100%; height: 100%; object-fit: cover;">
+        </a>
+        <a href="https://www.facebook.com/oatttophacsc" target="_blank" class="support-btn bg-facebook" title="Liên hệ Facebook">
+            <i class="fa-brands fa-facebook-f"></i>
+        </a>
+    </div>
+
+    <!-- Background Effects -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-gold-600 rounded-full mix-blend-screen filter blur-[120px] opacity-20 animate-float"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-yellow-600 rounded-full mix-blend-screen filter blur-[120px] opacity-10 animate-float" style="animation-delay: 2s;"></div>
+    </div>
+
+    <!-- Header -->
+    <nav class="w-full z-50 glass-panel fixed top-0 border-b border-white/5 bg-black/40 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center cursor-pointer group" onclick="router('home')">
+                    <div class="mr-3 text-gold-400 group-hover:scale-110 transition duration-300 drop-shadow-[0_0_10px_rgba(212,175,55,0.5)]">
+                        <i class="fa-solid fa-heart text-3xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-black tracking-wide leading-none text-white">LOCKET <span class="text-gradient-gold">GOLD</span></span>
+                    </div>
+                </div>
+                <div>
+                    <button onclick="toggleAdminLogin()" class="text-gray-400 hover:text-white transition-colors p-3 rounded-full hover:bg-white/5">
+                        <i class="fa-solid fa-user-shield text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-28 px-4 z-10 relative container mx-auto pb-20">
+
+        <!-- VIEW: LANDING PAGE -->
+        <div id="view-home" class="section-view active">
+            <div class="text-center mt-4 lg:mt-16 max-w-5xl mx-auto">
+                <div class="inline-flex items-center px-4 py-2 rounded-full border border-gold-400/30 bg-gold-400/5 text-gold-300 text-xs font-bold uppercase tracking-wider mb-8 animate-fade-in backdrop-blur-md">
+                    <span class="w-2 h-2 rounded-full bg-green-400 mr-2 animate-pulse"></span>
+                    Phiên bản Vĩnh Viễn
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl lg:text-9xl font-black mb-8 leading-tight animate-fade-in text-white tracking-tighter" style="animation-delay: 0.1s;">
+                    <span class="text-gradient-gold drop-shadow-2xl">LOCKET GOLD</span>
+                </h1>
+                
+                <p class="text-gray-400 text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed animate-fade-in" style="animation-delay: 0.2s;">
+                    Mở khóa toàn bộ tính năng cao cấp. Upload ảnh 4K, xem tin nhắn ẩn danh, tùy chỉnh giao diện Gold độc quyền.
+                </p>
+
+                <div class="flex flex-col md:flex-row items-center justify-center gap-6 animate-fade-in" style="animation-delay: 0.3s;">
+                    <div class="glass-panel p-10 rounded-3xl w-full md:w-auto min-w-[360px] border-gold-400/40 relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 bg-gold-500 text-black text-xs font-bold px-4 py-1.5 rounded-bl-xl">BÁN CHẠY NHẤT</div>
+                        <div class="text-gray-400 text-sm mb-1 uppercase tracking-widest font-bold">Giá Trọn Đời</div>
+                        <div class="flex items-start justify-center mb-4">
+                            <span class="text-6xl lg:text-7xl font-black text-white tracking-tighter drop-shadow-lg">50.000</span>
+                            <span class="text-xl text-gold-400 mt-2 ml-1 font-bold">VNĐ</span>
+                        </div>
+                        <div class="text-green-400 text-xs font-bold mb-8 flex items-center justify-center bg-green-400/10 py-1.5 rounded-lg border border-green-400/20">
+                            <i class="fa-solid fa-check-circle mr-2"></i> Bảo hành vĩnh viễn
+                        </div>
+                        <button onclick="router('verify')" class="btn-gold w-full py-5 rounded-2xl font-black text-xl shadow-2xl uppercase tracking-wider flex items-center justify-center gap-3 transform hover:scale-105 transition-all">
+                            <i class="fa-solid fa-key text-2xl"></i> NHẬP KEY NGAY
+                        </button>
+                        <p class="text-[10px] text-gray-500 mt-4 font-semibold uppercase tracking-wide">Hỗ trợ iOS & Android</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-24 max-w-6xl mx-auto animate-fade-in" style="animation-delay: 0.5s;">
+                <div class="glass-panel p-8 rounded-3xl hover:-translate-y-2 transition duration-300 border border-white/5 hover:border-gold-400/30">
+                    <div class="w-14 h-14 bg-gradient-to-br from-gold-400 to-yellow-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-gold-400/20 text-black text-2xl">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Upload 4K Ultra</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Tải lên video và hình ảnh với chất lượng gốc sắc nét.</p>
+                </div>
+                <div class="glass-panel p-8 rounded-3xl hover:-translate-y-2 transition duration-300 border border-white/5 hover:border-gold-400/30">
+                    <div class="w-14 h-14 bg-gradient-to-br from-gray-700 to-gray-900 rounded-2xl flex items-center justify-center mb-6 shadow-lg border border-gray-600 text-white text-2xl">
+                        <i class="fa-solid fa-user-secret"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Chế Độ Ẩn Danh</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Xem khoảnh khắc mà không để lại thông báo "Đã xem".</p>
+                </div>
+                <div class="glass-panel p-8 rounded-3xl hover:-translate-y-2 transition duration-300 border border-white/5 hover:border-gold-400/30">
+                    <div class="w-14 h-14 bg-gradient-to-br from-gold-100 to-gold-300 rounded-2xl flex items-center justify-center mb-6 shadow-lg text-black text-2xl">
+                        <i class="fa-solid fa-palette"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Gold Theme VIP</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Giao diện màu vàng Gold độc quyền sang trọng.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW: VERIFY KEY -->
+        <div id="view-verify" class="section-view">
+            <div class="max-w-md mx-auto mt-16 glass-panel p-8 md:p-10 rounded-[2rem] border border-gold-400/30 shadow-2xl relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-gold-400/20 rounded-full blur-2xl"></div>
+                <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-gold-400/10 rounded-full blur-2xl"></div>
+                <div class="text-center mb-10 relative z-10">
+                    <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-gold-400 to-yellow-700 shadow-lg shadow-gold-400/30 mb-6 text-black text-3xl">
+                        <i class="fa-solid fa-unlock-keyhole"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold mb-2">Xác Thực Key</h2>
+                    <p class="text-gray-400 text-sm">Hệ thống kích hoạt tự động 24/7</p>
+                </div>
+                <form onsubmit="handleVerify(event)" class="space-y-5 relative z-10">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-ticket text-gold-400"></i>
+                        </div>
+                        <input type="text" id="user-key-input" placeholder="XXXX-XXXX-XXXX-XXXX" 
+                            class="w-full input-gold py-4 pl-12 pr-4 rounded-xl text-lg font-mono uppercase tracking-widest placeholder-gray-600 focus:placeholder-gray-500" required>
+                    </div>
+                    <button type="submit" class="btn-gold w-full py-4 rounded-xl font-bold shadow-lg text-lg">
+                        KÍCH HOẠT NGAY <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </form>
+                <div class="mt-8 text-center relative z-10 border-t border-white/10 pt-4">
+                    <a href="#" onclick="router('home')" class="text-sm text-gray-500 hover:text-white transition">Quay lại trang chủ</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW: DOWNLOAD PAGE -->
+        <div id="view-download" class="section-view">
+            <div class="max-w-4xl mx-auto mt-10 text-center">
+                <div class="inline-block p-4 rounded-full bg-green-500/10 border border-green-500/30 mb-6 animate-bounce">
+                    <i class="fa-solid fa-check-circle text-6xl text-green-400"></i>
+                </div>
+                <h2 class="text-4xl font-bold mb-4">Xác Thực Thành Công!</h2>
+                <p class="text-gray-400 mb-12 max-w-lg mx-auto">Key bản quyền của bạn hợp lệ. Vui lòng chọn phiên bản phù hợp với thiết bị của bạn bên dưới.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+                    <!-- iOS Card -->
+                    <div class="glass-panel p-8 rounded-3xl border hover:border-gold-400 transition duration-300 relative group text-left">
+                        <div class="absolute top-6 right-6 text-white/10 text-6xl group-hover:text-gold-400/20 transition">
+                            <i class="fa-brands fa-apple"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">iPhone (iOS)</h3>
+                        <p class="text-gray-400 text-sm mb-4">Cài đặt trực tiếp (OTA). Nhấn cài đặt và chờ icon xuất hiện ngoài màn hình.</p>
+                        
+                        <a id="btn-install-ios" href="#" class="w-full btn-gold py-4 rounded-xl font-bold text-black flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-download"></i> CÀI ĐẶT NGAY
+                        </a>
+                        <p class="text-[10px] text-center text-gray-500 mt-4 italic">Hãy mở bằng Safari để cài đặt</p>
+                    </div>
+
+                    <!-- Android Card -->
+                    <div class="glass-panel p-8 rounded-3xl border hover:border-gold-400 transition duration-300 relative group text-left">
+                        <div class="absolute top-6 right-6 text-white/10 text-6xl group-hover:text-green-400/20 transition">
+                            <i class="fa-brands fa-android"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Android</h3>
+                        <p class="text-gray-400 text-sm mb-8">Tải xuống file APK mod đã mở khóa full tính năng.</p>
+                        
+                        <a id="link-android" href="#" target="_blank" class="block w-full bg-white/10 hover:bg-white/20 py-4 rounded-xl font-bold text-center border border-white/20 transition hover:scale-105">
+                            <i class="fa-solid fa-download mr-2"></i> TẢI XUỐNG APK
+                        </a>
+                        <p class="text-[10px] text-center text-gray-500 mt-4 italic">Không cần root máy.</p>
+                    </div>
+                </div>
+
+                <!-- CODE LOCKET GOLD -->
+                <div class="max-w-3xl mx-auto mt-8">
+                    <div class="glass-panel p-6 rounded-3xl border border-gold-400/30 bg-gold-900/10 flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center gap-4 text-left">
+                            <div class="w-12 h-12 bg-gold-400 text-black rounded-xl flex items-center justify-center text-2xl font-bold">
+                                <i class="fa-solid fa-code"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gold-300">CODE LOCKET GOLD</h3>
+                                <p class="text-gray-400 text-xs">Module kích hoạt tính năng ẩn danh & theme.</p>
+                            </div>
+                        </div>
+                        <button onclick="copyGoldCode()" class="bg-gray-800 hover:bg-gray-700 border border-gray-600 text-white font-bold py-3 px-6 rounded-xl transition flex items-center gap-2 min-w-[150px] justify-center">
+                            <i class="fa-regular fa-copy"></i> SAO CHÉP MÃ
+                        </button>
+                    </div>
+                </div>
+
+                <!-- GET APPLE ID -->
+                <div class="max-w-3xl mx-auto mt-4">
+                    <div class="glass-panel p-6 rounded-3xl border border-gold-400/30 bg-gold-900/10 flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center gap-4 text-left">
+                            <div class="w-12 h-12 bg-white text-black rounded-xl flex items-center justify-center text-2xl font-bold">
+                                <i class="fa-brands fa-apple"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white">GET APPLE ID</h3>
+                                <p class="text-gray-400 text-xs">Tài khoản Apple ID để tải app (nếu cần).</p>
+                            </div>
+                        </div>
+                        <button onclick="showAppleIdOptions()" class="bg-gray-800 hover:bg-gray-700 border border-gray-600 text-white font-bold py-3 px-6 rounded-xl transition flex items-center gap-2 min-w-[150px] justify-center">
+                            <i class="fa-solid fa-arrow-down"></i> GET
+                        </button>
+                    </div>
+                </div>
+
+                <!-- LẤY MÃ 2FA (ĐÃ CHUYỂN RA NGOÀI) -->
+                <div class="max-w-3xl mx-auto mt-4">
+                    <div class="glass-panel p-6 rounded-3xl border border-gold-400/30 bg-gold-900/10 flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center gap-4 text-left">
+                            <div class="w-12 h-12 bg-green-500 text-black rounded-xl flex items-center justify-center text-2xl font-bold">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-green-400">LẤY MÃ 2FA (ID APPLE)</h3>
+                                <p class="text-gray-400 text-xs">Nhập mã xác minh khi đăng nhập Apple ID.</p>
+                            </div>
+                        </div>
+                        <button onclick="get2FACode()" class="bg-green-700 hover:bg-green-600 border border-green-500 text-white font-bold py-3 px-6 rounded-xl transition flex items-center gap-2 min-w-[150px] justify-center">
+                            <i class="fa-solid fa-unlock"></i> LẤY MÃ
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- VIEW: ADMIN PANEL -->
+        <div id="view-admin" class="section-view">
+            <div class="max-w-6xl mx-auto mt-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gold-400"><i class="fa-solid fa-server mr-2"></i> ADMIN CONTROL</h2>
+                    <button onclick="router('home')" class="bg-red-500/10 text-red-400 border border-red-500/30 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-red-500/20 transition">Thoát</button>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Config Box -->
+                    <div class="glass-panel p-6 rounded-2xl col-span-1">
+                        <h3 class="font-bold mb-4 border-b border-gray-700 pb-3 text-gold-300">Cấu hình Link Tải</h3>
+                        <form onsubmit="saveConfigToCloud(event)" class="space-y-4">
+                            <div>
+                                <label class="text-xs text-white font-bold block mb-1">Link Plist (iOS)</label>
+                                <div class="flex gap-2">
+                                    <input type="text" id="admin-link-ios" class="w-full input-gold p-3 rounded-lg text-xs" placeholder="https://.../install.plist">
+                                    <button type="button" onclick="checkLiveLink()" class="bg-gray-700 hover:bg-gray-600 text-white px-3 rounded-lg text-xs font-bold whitespace-nowrap"><i class="fa-solid fa-check"></i> Check</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-xs text-white font-bold block mb-1">Link APK (Android)</label>
+                                <input type="text" id="admin-link-android" class="w-full input-gold p-3 rounded-lg text-xs" placeholder="https://.../game.apk">
+                            </div>
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white w-full py-3 rounded-lg text-sm font-bold shadow-lg transition">LƯU CẤU HÌNH</button>
+                        </form>
+                        
+                        <!-- Plist Generator -->
+                        <div class="mt-8 pt-6 border-t border-gray-700/50">
+                            <h3 class="font-bold mb-2 text-xs uppercase text-gold-400"><i class="fa-solid fa-wrench mr-1"></i> Công cụ tạo file Plist</h3>
+                            <input type="text" id="tool-ipa-link" class="w-full input-gold p-2 rounded text-xs mb-2" placeholder="Dán link file .ipa vào đây...">
+                            <button onclick="generatePlistCode()" class="bg-gray-700 hover:bg-gray-600 text-white w-full py-2 rounded text-xs font-semibold mb-2">Tạo Code Plist</button>
+                            <textarea id="tool-plist-output" rows="4" class="w-full input-gold p-2 rounded text-xs textarea-code bg-black/50" readonly placeholder="Code sẽ hiện ở đây..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Keys Management -->
+                    <div class="glass-panel p-6 rounded-2xl col-span-1 lg:col-span-2">
+                        <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-3">
+                            <h3 class="font-bold text-white">Danh sách Key (Realtime)</h3>
+                            <button onclick="createNewKeyCloud()" class="bg-gold-500 text-black px-4 py-2 rounded-lg text-xs font-bold hover:bg-gold-400 hover:scale-105 transition shadow-lg">
+                                <i class="fa-solid fa-plus mr-1"></i> TẠO KEY MỚI
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto h-[500px] pr-2">
+                            <table class="w-full text-left text-sm">
+                                <thead class="text-gray-400 bg-black/20 sticky top-0 backdrop-blur-md z-10">
+                                    <tr>
+                                        <th class="p-3 rounded-tl-lg">Key Code</th>
+                                        <th class="p-3">Mã 2FA</th>
+                                        <th class="p-3">Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="key-table-body" class="divide-y divide-gray-800"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FIREBASE SDK v9 -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore, collection, doc, getDoc, setDoc, addDoc, updateDoc, onSnapshot, query, orderBy, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        // ================================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyCy0EkPzwlqf69pI9utVMLoaCM5Nqfm3yk",
+            authDomain: "locket-gold1.firebaseapp.com",
+            projectId: "locket-gold1",
+            storageBucket: "locket-gold1.firebasestorage.app",
+            messagingSenderId: "897024430830",
+            appId: "1:897024430830:web:e72d27628a7b1d52ba19ff"
+        };
+        // ================================================================
+
+        let db;
+        let app;
+        const ADMIN_PASS = 'admin123';
+        const DEVICE_ID_KEY = 'locket_device_id';
+
+        // Khởi tạo Firebase
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            console.log("Firebase Init OK");
+            loadConfigFromCloud();
+        } catch (e) {
+            console.error("Lỗi Init:", e);
+            alert("Lỗi kết nối database. Vui lòng refresh.");
+        }
+
+        if (!localStorage.getItem(DEVICE_ID_KEY)) {
+            localStorage.setItem(DEVICE_ID_KEY, 'DEV-' + Math.random().toString(36).substr(2, 9).toUpperCase());
+        }
+        const currentDeviceID = localStorage.getItem(DEVICE_ID_KEY);
+
+        function hideLoading() {
+            const loading = document.getElementById('loading-overlay');
+            if(loading) {
+                loading.style.opacity = '0';
+                setTimeout(() => loading.style.display = 'none', 500);
+            }
+        }
+
+        async function loadConfigFromCloud() {
+            try {
+                const docRef = doc(db, "system", "config");
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    window.cloudConfig = docSnap.data();
+                    updateIOSButton();
+                } else {
+                    try {
+                        await setDoc(docRef, { ios: "", android: "" });
+                        window.cloudConfig = { ios: "", android: "" };
+                    } catch(err) {
+                        window.cloudConfig = { ios: "", android: "" };
+                    }
+                }
+                hideLoading();
+            } catch (error) {
+                console.error("Lỗi Load Config:", error);
+                hideLoading();
+            }
+        }
+
+        function updateIOSButton() {
+            const config = window.cloudConfig || { ios: '' };
+            const btn = document.getElementById('btn-install-ios');
+            let rawLink = config.ios || '';
+
+            if (rawLink && rawLink.length > 5) {
+                let finalLink;
+                if (rawLink.startsWith('itms-services://')) {
+                    finalLink = rawLink;
+                } else {
+                    finalLink = `itms-services://?action=download-manifest&url=${encodeURIComponent(rawLink)}`;
+                }
+                
+                btn.href = finalLink;
+            } else {
+                btn.href = "#";
+            }
+        }
+
+        window.router = function(view) {
+            document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
+            document.getElementById('view-' + view).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        window.toggleAdminLogin = function() {
+            Swal.fire({
+                title: 'Admin Login',
+                input: 'password',
+                background: '#1e1e1e', color: '#fff',
+                confirmButtonColor: '#D4AF37',
+                preConfirm: (pass) => {
+                    if (pass === ADMIN_PASS) return true;
+                    else Swal.showValidationMessage('Sai mật khẩu!');
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.router('admin');
+                    listenKeysRealtime(); 
+                    loadAdminConfigUI();
+                }
+            });
+        }
+
+        window.handleVerify = async function(e) {
+            e.preventDefault();
+            const inputKey = document.getElementById('user-key-input').value.trim();
+            if(!inputKey) return;
+            Swal.fire({ title: 'Đang kiểm tra...', didOpen: () => Swal.showLoading(), background: '#1e1e1e', color: '#fff' });
+
+            try {
+                const keyRef = doc(db, "keys", inputKey);
+                const keySnap = await getDoc(keyRef);
+
+                if (!keySnap.exists()) {
+                    Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Key không tồn tại!', background: '#1e1e1e', color: '#fff' });
+                    return;
+                }
+
+                const keyData = keySnap.data();
+                if (keyData.isUsed) {
+                    if (keyData.deviceId === currentDeviceID) {
+                        showDownloadPage();
+                        Swal.close();
+                    } else {
+                        Swal.fire({ icon: 'warning', title: 'Bị từ chối', text: 'Key đã dùng trên máy khác.', background: '#1e1e1e', color: '#fff' });
+                    }
+                } else {
+                    await updateDoc(keyRef, { isUsed: true, deviceId: currentDeviceID, usedAt: new Date().toISOString() });
+                    Swal.fire({ icon: 'success', title: 'Thành công!', timer: 1500, showConfirmButton: false, background: '#1e1e1e', color: '#fff' })
+                    .then(() => showDownloadPage());
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire({ icon: 'error', title: 'Lỗi', text: error.message, background: '#1e1e1e', color: '#fff' });
+            }
+        }
+
+        function showDownloadPage() {
+            const config = window.cloudConfig || { ios: '#', android: '#' };
+            document.getElementById('link-android').href = config.android || '#';
+            updateIOSButton();
+            window.router('download');
+        }
+
+        // --- ADMIN FUNCTIONS ---
+        window.saveConfigToCloud = async function(e) {
+            e.preventDefault();
+            const ios = document.getElementById('admin-link-ios').value.trim();
+            const android = document.getElementById('admin-link-android').value.trim();
+
+            if (ios && ios.includes('.ipa')) {
+                 if (!ios.includes('itms-services') && !ios.includes('.plist')) {
+                     Swal.fire({ icon: 'error', title: 'SAI LINK!', html: `Bạn đang điền link .IPA<br>Phải dùng file .PLIST`, background: '#1e1e1e', color: '#fff' });
+                     return;
+                 }
+            }
+
+            try {
+                const oldData = window.cloudConfig || {};
+                await setDoc(doc(db, "system", "config"), { 
+                    ...oldData,
+                    ios, android 
+                });
+                window.cloudConfig = { ...oldData, ios, android };
+                updateIOSButton();
+                Swal.fire({ icon: 'success', title: 'Đã lưu!', toast: true, position: 'top-end', timer: 2000, background: '#1e1e1e', color: '#fff' });
+            } catch (error) {
+                Swal.fire('Lỗi lưu', error.message, 'error');
+            }
+        }
+
+        // --- CHECK LINK SỐNG (MỚI) ---
+        window.checkLiveLink = async function() {
+            const url = document.getElementById('admin-link-ios').value.trim();
+            if(!url) return Swal.fire('Lỗi', 'Chưa nhập link!', 'error');
+            
+            Swal.fire({ title: 'Đang check...', didOpen: () => Swal.showLoading(), background: '#1e1e1e', color: '#fff' });
+            
+            try {
+                const res = await fetch(url, { method: 'HEAD' });
+                if(res.ok) {
+                    Swal.fire({ icon: 'success', title: 'Link Ngon!', text: 'File Plist tồn tại (200 OK).', background: '#1e1e1e', color: '#fff' });
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Link Chết!', text: `Mã lỗi: ${res.status}. Kiểm tra lại xem đã upload file chưa?`, background: '#1e1e1e', color: '#fff' });
+                }
+            } catch(e) {
+                Swal.fire({ 
+                    icon: 'warning', 
+                    title: 'Không thể check tự động', 
+                    text: 'Không check được do bảo mật CORS. Hãy thử mở link này trên tab mới xem có ra chữ không.', 
+                    footer: `<a href="${url}" target="_blank" class="text-gold-400 underline">Mở thử link</a>`,
+                    background: '#1e1e1e', color: '#fff' 
+                });
+            }
+        }
+
+        async function loadAdminConfigUI() {
+            if (window.cloudConfig) {
+                document.getElementById('admin-link-ios').value = window.cloudConfig.ios || "";
+                document.getElementById('admin-link-android').value = window.cloudConfig.android || "";
+            } else {
+                try {
+                    const snap = await getDoc(doc(db, "system", "config"));
+                    if(snap.exists()) {
+                        const d = snap.data();
+                        document.getElementById('admin-link-ios').value = d.ios;
+                        document.getElementById('admin-link-android').value = d.android;
+                    }
+                } catch(e) {}
+            }
+        }
+
+        window.createNewKeyCloud = async function() {
+            const randomPart = () => Math.random().toString(36).substr(2, 4).toUpperCase();
+            const newCode = `LOC-${randomPart()}-${randomPart()}-${randomPart()}`;
+            try {
+                await setDoc(doc(db, "keys", newCode), {
+                    code: newCode, isUsed: false, deviceId: null, createdAt: new Date().toISOString(), apple2FA: ""
+                });
+                Swal.fire({
+                    title: 'Key Mới', text: newCode, icon: 'success',
+                    background: '#1e1e1e', color: '#fff', confirmButtonText: 'Copy'
+                }).then((r) => { if(r.isConfirmed) navigator.clipboard.writeText(newCode); });
+            } catch (error) {
+                Swal.fire('Lỗi tạo Key', 'Kiểm tra mạng hoặc quyền DB.', 'error');
+            }
+        }
+
+        window.deleteKeyCloud = async function(keyCode) {
+            if(!confirm("Xóa key này?")) return;
+            try { await deleteDoc(doc(db, "keys", keyCode)); } catch(e) { alert(e.message); }
+        }
+
+        // --- HÀM GỬI MÃ 2FA CHO KHÁCH (ADMIN TRÊN WEB) ---
+        window.send2FAForKey = async function(keyCode) {
+            const { value: code } = await Swal.fire({
+                title: 'Nhập mã 2FA',
+                text: `Gửi mã cho key: ${keyCode}`,
+                input: 'text',
+                inputPlaceholder: 'Nhập mã 6 số (VD: 123456)',
+                background: '#1e1e1e', color: '#fff',
+                confirmButtonColor: '#28a745',
+                showCancelButton: true
+            });
+
+            if (code) {
+                try {
+                    await setDoc(doc(db, "keys", keyCode), {
+                        apple2FA: code,
+                        apple2FATime: new Date().getTime()
+                    }, { merge: true });
+                    Swal.fire({ icon: 'success', title: 'Đã gửi mã!', background: '#1e1e1e', color: '#fff', toast: true, position: 'top-end', timer: 2000 });
+                } catch(e) {
+                    Swal.fire('Lỗi', e.message, 'error');
+                }
+            }
+        }
+
+        function listenKeysRealtime() {
+            try {
+                const q = query(collection(db, "keys"), orderBy("createdAt", "desc"));
+                onSnapshot(q, (snapshot) => {
+                    const tbody = document.getElementById('key-table-body');
+                    tbody.innerHTML = '';
+                    snapshot.forEach((doc) => {
+                        const k = doc.data();
+                        
+                        const tr = document.createElement('tr');
+                        tr.className = 'border-b border-gray-800 hover:bg-white/5 transition';
+                        tr.innerHTML = `
+                            <td class="p-3 font-mono text-gold-300 font-bold">${k.code}</td>
+                            <td class="p-3 font-mono text-green-400">${k.apple2FA || '-'}</td>
+                            <td class="p-3 text-right flex gap-2 justify-end">
+                                <button onclick="send2FAForKey('${k.code}')" class="text-green-500 hover:text-green-300 p-1 border border-green-500 rounded px-2 text-xs font-bold">GỬI 2FA</button>
+                                <button onclick="deleteKeyCloud('${k.code}')" class="text-red-500 hover:text-red-300 p-1 border border-red-500 rounded px-2 text-xs"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }, (error) => { console.error("Realtime Error", error); });
+            } catch(e) { console.error(e); }
+        }
+
+        window.generatePlistCode = function() {
+            const ipaLink = document.getElementById('tool-ipa-link').value.trim();
+            if(!ipaLink) return alert("Nhập link IPA đi bạn ơi!");
+            const plist = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict><key>items</key><array><dict><key>assets</key><array><dict><key>kind</key><string>software-package</string><key>url</key><string>${ipaLink}</string></dict></array><key>metadata</key><dict><key>bundle-identifier</key><string>com.locket.Locket</string><key>bundle-version</key><string>1.0</string><key>kind</key><string>software</string><key>title</key><string>Locket Gold</string></dict></dict></array></dict></plist>`;
+            document.getElementById('tool-plist-output').value = plist;
+        }
+
+        // --- HÀM COPY MODULE CODE ---
+        window.copyGoldCode = function() {
+            const codeLink = "https://raw.githubusercontent.com/DuongDarkFlippervgu/LK-GOLd/refs/heads/main/modules/LocketGold_NMDuong.sgmodule";
+            navigator.clipboard.writeText(codeLink).then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: 'Đã Copy Vào Bộ Nhớ Tạm!',
+                    background: '#1e1e1e', color: '#fff',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            }).catch(err => {
+                Swal.fire('Lỗi', 'Không thể copy, vui lòng thử lại', 'error');
+            });
+        }
+
+        // --- HÀM XỬ LÝ GET APPLE ID ---
+        window.showAppleIdOptions = function() {
+            Swal.fire({
+                title: '<strong style="color: #fff">Chọn thông tin cần Copy</strong>',
+                background: '#1e1e1e',
+                html: `
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <button id="copy-apple-id" class="swal2-confirm swal2-styled" style="width: 100%; margin: 0; background-color: #333; border: 1px solid #555;">Copy ID APPLE</button>
+                        <button id="copy-apple-pass" class="swal2-confirm swal2-styled" style="width: 100%; margin: 0; background-color: #333; border: 1px solid #555;">Copy PASSWORD</button>
+                    </div>
+                `,
+                showConfirmButton: false,
+                showCloseButton: true,
+                didOpen: () => {
+                    document.getElementById('copy-apple-id').addEventListener('click', () => {
+                        window.copyText('duonglo6203@gmail.com', 'Đã Copy ID Apple!');
+                    });
+                    document.getElementById('copy-apple-pass').addEventListener('click', () => {
+                        window.copyText('Duongpizza2007&', 'Đã Copy Password!');
+                    });
+                }
+            });
+        }
+
+        // --- HÀM LẤY MÃ 2FA (LOGIC MỚI) ---
+        window.get2FACode = async function() {
+            const { value: keyInput } = await Swal.fire({
+                title: 'NHẬP KEY CỦA BẠN',
+                input: 'text',
+                inputPlaceholder: 'XXXX-XXXX-XXXX-XXXX',
+                text: 'Nhập Key bản quyền để lấy mã xác minh riêng.',
+                background: '#1e1e1e', color: '#fff',
+                confirmButtonColor: '#28a745',
+                showCancelButton: true
+            });
+
+            if (keyInput) {
+                Swal.showLoading();
+                try {
+                    const docRef = doc(db, "keys", keyInput.trim());
+                    const docSnap = await getDoc(docRef);
+                    
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        const code = data.apple2FA;
+                        // const time = data.apple2FATime; // Có thể check time nếu cần
+                        
+                        if (code) {
+                            Swal.fire({
+                                title: 'MÃ 2FA CỦA BẠN',
+                                text: code,
+                                icon: 'success',
+                                confirmButtonText: 'COPY',
+                                background: '#1e1e1e', color: '#fff'
+                            }).then((r) => {
+                                if(r.isConfirmed) navigator.clipboard.writeText(code);
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Chưa có mã',
+                                text: 'Vui lòng nhắn tin cho Admin để lấy mã cho Key này.',
+                                background: '#1e1e1e', color: '#fff'
+                            });
+                        }
+                    } else {
+                        Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Key không tồn tại!', background: '#1e1e1e', color: '#fff' });
+                    }
+                } catch(e) {
+                    Swal.fire('Lỗi', e.message, 'error');
+                }
+            }
+        }
+
+        // Hàm Copy chung
+        window.copyText = function(text, successMessage) {
+            navigator.clipboard.writeText(text).then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: successMessage,
+                    background: '#1e1e1e', color: '#fff',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            }).catch(err => {
+                Swal.fire('Lỗi', 'Không thể copy', 'error');
+            });
+        }
+    </script>
+</body>
+</html>
