@@ -7,7 +7,7 @@
         <dict>
             <key>assets</key>
             <array>
-                <!-- 1. LINK FILE IPA (GIỮ NGUYÊN) -->
+                <!-- 1. LINK FILE IPA -->
                 <dict>
                     <key>kind</key>
                     <string>software-package</string>
@@ -15,22 +15,24 @@
                     <string>https://github.com/DuongDarkFlippervgu/locketgoldwweb/raw/refs/heads/main/locketgold.ipa</string>
                 </dict>
 
-                <!-- 2. LINK ICON KHI ĐANG TẢI (MỚI THÊM) -->
+                <!-- 2. LINK ICON HIỂN THỊ KHI ĐANG TẢI (Đã sửa sang link raw) -->
                 <dict>
                     <key>kind</key>
                     <string>display-image</string>
                     <key>needs-shine</key>
                     <false/>
                     <key>url</key>
-                    <string>minhduong.jpg</string>
+                    <string>https://github.com/DuongDarkFlippervgu/locketgoldwweb/raw/main/duytran1.jpg</string>
                 </dict>
+
+                <!-- 3. LINK ICON FULL SIZE (Đã sửa sang link raw) -->
                 <dict>
                     <key>kind</key>
                     <string>full-size-image</string>
                     <key>needs-shine</key>
                     <false/>
                     <key>url</key>
-                    <string>minhduong.jpg</string>
+                    <string>https://github.com/DuongDarkFlippervgu/locketgoldwweb/raw/main/duytran1.jpg</string>
                 </dict>
             </array>
             <key>metadata</key>
