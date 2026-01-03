@@ -381,7 +381,7 @@
                     </div>
                 </div>
 
-                <!-- CODE LOCKET GOLD (ĐÃ CẬP NHẬT: ẨN LINK & TẢI LOCAL) -->
+                <!-- CODE LOCKET GOLD -->
                 <div class="max-w-3xl mx-auto mt-8">
                     <div class="glass-panel p-6 rounded-3xl border border-gold-400/30 bg-gold-900/10 flex flex-col md:flex-row items-center justify-between gap-4">
                         <div class="flex items-center gap-4 text-left">
@@ -389,13 +389,12 @@
                                 <i class="fa-solid fa-code"></i>
                             </div>
                             <div>
-                                <h3 class="text-xl font-bold text-gold-300">MODULE LOCKET GOLD</h3>
-                                <p class="text-gray-400 text-xs">Cài đặt trực tiếp hoặc tải tệp cục bộ (Bảo mật).</p>
+                                <h3 class="text-xl font-bold text-gold-300">CODE LOCKET GOLD</h3>
+                                <p class="text-gray-400 text-xs">Module Kích Hoạt Locket Gold Bản Quyền.</p>
                             </div>
                         </div>
-                        <!-- Nút này giờ sẽ gọi hàm Cài đặt -->
-                        <button onclick="installModule()" class="bg-gradient-to-r from-gold-500 to-yellow-600 hover:from-gold-400 hover:to-yellow-500 border border-gold-300 text-black font-black py-3 px-6 rounded-xl transition flex items-center gap-2 min-w-[150px] justify-center shadow-lg shadow-gold-500/20">
-                            <i class="fa-solid fa-bolt"></i> CÀI ĐẶT MODULE
+                        <button onclick="copyGoldCode()" class="bg-gray-800 hover:bg-gray-700 border border-gray-600 text-white font-bold py-3 px-6 rounded-xl transition flex items-center gap-2 min-w-[150px] justify-center">
+                            <i class="fa-regular fa-copy"></i> SAO CHÉP MÃ
                         </button>
                     </div>
                 </div>
@@ -497,6 +496,7 @@
                                         <th class="p-3 rounded-tl-lg">Key Code</th>
                                         <th class="p-3">IP</th>
                                         <th class="p-3">Device</th>
+                                        <th class="p-3">Đã Dùng</th> <!-- Cột Mới: Thời Gian Sử Dụng -->
                                         <th class="p-3">Mã 2FA</th>
                                         <th class="p-3">Hành động</th>
                                     </tr>
@@ -729,7 +729,7 @@
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     // Lưu link vào biến bộ nhớ, KHÔNG in ra console, KHÔNG lưu localStorage
-                    window.secretModuleLink = data.moduleLink || "";
+                    if(data.moduleLink) window.secretModuleLink = data.moduleLink;
                 }
             } catch(e) {
                 console.error("Lỗi lấy config module");
@@ -871,10 +871,27 @@
                         
                         const tr = document.createElement('tr');
                         tr.className = 'border-b border-gray-800 hover:bg-white/5 transition';
+                        
+                        // Tính thời gian đã sử dụng
+                        let usedTimeDisplay = '-';
+                        if (k.isUsed && k.usedAt) {
+                            const usedDate = new Date(k.usedAt);
+                            const now = new Date();
+                            const diffMs = now - usedDate;
+                            const diffMins = Math.floor(diffMs / 60000);
+                            const diffHours = Math.floor(diffMs / 3600000);
+                            const diffDays = Math.floor(diffMs / 86400000);
+
+                            if (diffDays > 0) usedTimeDisplay = `${diffDays} ngày trước`;
+                            else if (diffHours > 0) usedTimeDisplay = `${diffHours} giờ trước`;
+                            else usedTimeDisplay = `${diffMins} phút trước`;
+                        }
+
                         tr.innerHTML = `
                             <td class="p-3 font-mono text-gold-300 font-bold">${k.code}</td>
                             <td class="p-3 text-gray-400 text-xs">${k.ip || 'N/A'}</td>
                             <td class="p-3 text-gold-400 text-xs font-bold">${k.deviceType || 'N/A'}</td>
+                            <td class="p-3 text-gray-300 text-xs italic">${usedTimeDisplay}</td>
                             <td class="p-3 font-mono text-green-400">${k.apple2FA || '-'}</td>
                             <td class="p-3 text-right flex gap-2 justify-end">
                                 <button onclick="send2FAForKey('${k.code}')" class="text-green-500 hover:text-green-300 p-1 border border-green-500 rounded px-2 text-xs font-bold">GỬI 2FA</button>
@@ -896,85 +913,23 @@
             document.getElementById('tool-plist-output').value = plist;
         }
 
-        // --- HÀM CÀI ĐẶT MODULE (SỬA LẠI: TẢI FILE CỤC BỘ) ---
-        window.installModule = async function() {
-            // Kiểm tra link ẩn
-            if (!window.secretModuleLink || window.secretModuleLink.length < 5) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Lỗi Link',
-                    text: 'Admin chưa cập nhật Module, hoặc bạn chưa nhập Key!',
-                    background: '#1e1e1e', color: '#fff'
-                });
-                return;
-            }
-
-            // URL Scheme Cài trực tiếp (Có thể lỗi trên iOS)
-            // Thêm encodeURIComponent để fix lỗi "không có gì xảy ra"
-            const shadowrocketUrl = `shadowrocket://install?url=${encodeURIComponent(window.secretModuleLink)}`;
+        // --- HÀM COPY MODULE CODE (ĐÃ KHÔI PHỤC) ---
+        window.copyGoldCode = function() {
+            // Sử dụng link mặc định nếu chưa có link từ DB
+            const codeLink = window.secretModuleLink || "https://raw.githubusercontent.com/DuongDarkFlippervgu/LK-GOLd/refs/heads/main/modules/LocketGold_NMDuong.sgmodule";
             
-            // Hỏi người dùng
-            const { isConfirmed, isDenied } = await Swal.fire({
-                title: 'Chọn Cách Cài Đặt',
-                text: 'Bạn muốn cài tự động (Online) hay Tải file về (Local)?',
-                icon: 'question',
-                showCancelButton: true,
-                showDenyButton: true,
-                confirmButtonText: 'Cài Online (Nhanh)',
-                denyButtonText: 'Tải File Cục Bộ (Chắc chắn)',
-                cancelButtonText: 'Hủy',
-                background: '#1e1e1e', color: '#fff',
-                confirmButtonColor: '#D4AF37',
-                denyButtonColor: '#3b82f6'
-            });
-
-            if (isConfirmed) {
-                // Cách 1: Cài Online qua URL Scheme
-                window.location.href = shadowrocketUrl;
-            } else if (isDenied) {
-                // Cách 2: Tải file về máy để import thủ công (Local Module)
+            navigator.clipboard.writeText(codeLink).then(() => {
                 Swal.fire({
-                    title: 'Đang tải file...',
-                    didOpen: () => Swal.showLoading(),
-                    background: '#1e1e1e', color: '#fff'
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: 'Đã Copy Link Module!',
+                    background: '#1e1e1e', color: '#fff',
+                    timer: 2000,
+                    showConfirmButton: false
                 });
-
-                try {
-                    // Fetch nội dung file từ link ẩn
-                    const response = await fetch(window.secretModuleLink);
-                    if (!response.ok) throw new Error("Không thể tải file");
-                    const blob = await response.blob();
-                    
-                    // Tạo link tải ảo
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.style.display = 'none';
-                    a.href = url;
-                    a.download = 'LocketGold_VIP.sgmodule'; // Tên file khi tải về
-                    document.body.appendChild(a);
-                    a.click();
-                    
-                    // Cleanup
-                    window.URL.revokeObjectURL(url);
-                    document.body.removeChild(a);
-
-                    // Hướng dẫn sau khi tải
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Đã tải xong!',
-                        html: 'Bấm vào file vừa tải về <b>(LocketGold_VIP.sgmodule)</b> <br>👉 Chọn nút Chia sẻ <i class="fa-solid fa-share-from-square"></i> <br>👉 Chọn <b>Shadowrocket</b> để thêm vào Modules.',
-                        background: '#1e1e1e', color: '#fff'
-                    });
-
-                } catch (error) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi tải file',
-                        text: 'Link gốc bị chặn CORS hoặc không tồn tại. Vui lòng dùng Cài Online.',
-                        background: '#1e1e1e', color: '#fff'
-                    });
-                }
-            }
+            }).catch(err => {
+                Swal.fire('Lỗi', 'Không thể copy, vui lòng thử lại', 'error');
+            });
         }
 
         // --- HÀM XỬ lý LIÊN HỆ ADMIN (NÂNG CẤP GIAO DIỆN & HIỆU ỨNG) ---
