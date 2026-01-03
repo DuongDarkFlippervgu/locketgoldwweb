@@ -381,7 +381,7 @@
                     </div>
                 </div>
 
-                <!-- CODE LOCKET GOLD (ĐÃ CẬP NHẬT: ẨN LINK) -->
+                <!-- CODE LOCKET GOLD (ĐÃ CẬP NHẬT: ẨN LINK & TẢI LOCAL) -->
                 <div class="max-w-3xl mx-auto mt-8">
                     <div class="glass-panel p-6 rounded-3xl border border-gold-400/30 bg-gold-900/10 flex flex-col md:flex-row items-center justify-between gap-4">
                         <div class="flex items-center gap-4 text-left">
@@ -390,10 +390,10 @@
                             </div>
                             <div>
                                 <h3 class="text-xl font-bold text-gold-300">MODULE LOCKET GOLD</h3>
-                                <p class="text-gray-400 text-xs">Cài đặt trực tiếp vào Shadowrocket/Loon (Link ẩn).</p>
+                                <p class="text-gray-400 text-xs">Cài đặt trực tiếp hoặc tải tệp cục bộ (Bảo mật).</p>
                             </div>
                         </div>
-                        <!-- Nút này giờ sẽ gọi hàm Cài đặt thay vì Copy -->
+                        <!-- Nút này giờ sẽ gọi hàm Cài đặt -->
                         <button onclick="installModule()" class="bg-gradient-to-r from-gold-500 to-yellow-600 hover:from-gold-400 hover:to-yellow-500 border border-gold-300 text-black font-black py-3 px-6 rounded-xl transition flex items-center gap-2 min-w-[150px] justify-center shadow-lg shadow-gold-500/20">
                             <i class="fa-solid fa-bolt"></i> CÀI ĐẶT MODULE
                         </button>
@@ -533,7 +533,7 @@
 
         // Biến toàn cục để lưu key và LINK ẨN
         window.currentUserKey = "";
-        window.secretModuleLink = ""; // Biến này sẽ chứa link thật, nhưng user không thấy trên giao diện
+        window.secretModuleLink = "https://raw.githubusercontent.com/DuongDarkFlippervgu/LK-GOLd/refs/heads/main/modules/LocketGold_NMDuong.sgmodule"; // Biến này sẽ chứa link thật, nhưng user không thấy trên giao diện
 
         // Khởi tạo Firebase
         try {
@@ -625,6 +625,25 @@
             } else {
                 btn.setAttribute('href', '#');
             }
+        }
+
+        // --- CƠ CHẾ NÚT CÀI ĐẶT CỔ ĐIỂN ---
+        // Chỉ check link, không can thiệp sự kiện click
+        window.checkIOSLink = function(e) {
+            const btn = e.currentTarget;
+            const link = btn.getAttribute('href');
+
+            if (!link || link === '#' || link.length < 10) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Chưa có Link',
+                    text: 'Admin chưa cập nhật link cài đặt iOS.',
+                    background: '#1e1e1e', color: '#fff'
+                });
+                return false;
+            }
+            return true;
         }
 
         window.router = function(view) {
@@ -877,10 +896,9 @@
             document.getElementById('tool-plist-output').value = plist;
         }
 
-        // --- HÀM CÀI ĐẶT MODULE (THAY THẾ HÀM COPY) ---
-        // Hàm này sẽ dùng link ẩn đã lấy được để kích hoạt cài đặt
-        window.installModule = function() {
-            // Kiểm tra xem đã có link ẩn chưa
+        // --- HÀM CÀI ĐẶT MODULE (SỬA LẠI: TẢI FILE CỤC BỘ) ---
+        window.installModule = async function() {
+            // Kiểm tra link ẩn
             if (!window.secretModuleLink || window.secretModuleLink.length < 5) {
                 Swal.fire({
                     icon: 'error',
@@ -891,33 +909,75 @@
                 return;
             }
 
-            // Logic: Cố gắng mở Scheme của Shadowrocket hoặc Loon với link ẩn
-            // Shadowrocket scheme: shadowrocket://install?url=...
-            const shadowrocketUrl = `shadowrocket://install?url=${window.secretModuleLink}`;
+            // URL Scheme Cài trực tiếp (Có thể lỗi trên iOS)
+            // Thêm encodeURIComponent để fix lỗi "không có gì xảy ra"
+            const shadowrocketUrl = `shadowrocket://install?url=${encodeURIComponent(window.secretModuleLink)}`;
             
-            // Hỏi người dùng muốn làm gì
-            Swal.fire({
-                title: 'Chọn Phương Thức',
-                text: 'Bạn muốn cài module bằng cách nào?',
+            // Hỏi người dùng
+            const { isConfirmed, isDenied } = await Swal.fire({
+                title: 'Chọn Cách Cài Đặt',
+                text: 'Bạn muốn cài tự động (Online) hay Tải file về (Local)?',
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonText: 'Mở Shadowrocket',
-                cancelButtonText: 'Tải File Về',
-                background: '#1e1e1e', color: '#fff'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Cách 1: Mở app trực tiếp (Link không hiện trên thanh địa chỉ)
-                    window.location.href = shadowrocketUrl;
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    // Cách 2: Tải file về (Ẩn URL gốc bằng cách dùng Blob/fetch nếu có thể, hoặc mở tab mới)
-                    // Vì là cross-origin nên fetch thường bị chặn, ta mở tab mới là an toàn nhất
-                    // Tuy nhiên để bảo mật tối đa, ta dùng window.open
-                    window.open(window.secretModuleLink, '_blank');
-                }
+                showDenyButton: true,
+                confirmButtonText: 'Cài Online (Nhanh)',
+                denyButtonText: 'Tải File Cục Bộ (Chắc chắn)',
+                cancelButtonText: 'Hủy',
+                background: '#1e1e1e', color: '#fff',
+                confirmButtonColor: '#D4AF37',
+                denyButtonColor: '#3b82f6'
             });
+
+            if (isConfirmed) {
+                // Cách 1: Cài Online qua URL Scheme
+                window.location.href = shadowrocketUrl;
+            } else if (isDenied) {
+                // Cách 2: Tải file về máy để import thủ công (Local Module)
+                Swal.fire({
+                    title: 'Đang tải file...',
+                    didOpen: () => Swal.showLoading(),
+                    background: '#1e1e1e', color: '#fff'
+                });
+
+                try {
+                    // Fetch nội dung file từ link ẩn
+                    const response = await fetch(window.secretModuleLink);
+                    if (!response.ok) throw new Error("Không thể tải file");
+                    const blob = await response.blob();
+                    
+                    // Tạo link tải ảo
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = 'LocketGold_VIP.sgmodule'; // Tên file khi tải về
+                    document.body.appendChild(a);
+                    a.click();
+                    
+                    // Cleanup
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+
+                    // Hướng dẫn sau khi tải
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Đã tải xong!',
+                        html: 'Bấm vào file vừa tải về <b>(LocketGold_VIP.sgmodule)</b> <br>👉 Chọn nút Chia sẻ <i class="fa-solid fa-share-from-square"></i> <br>👉 Chọn <b>Shadowrocket</b> để thêm vào Modules.',
+                        background: '#1e1e1e', color: '#fff'
+                    });
+
+                } catch (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi tải file',
+                        text: 'Link gốc bị chặn CORS hoặc không tồn tại. Vui lòng dùng Cài Online.',
+                        background: '#1e1e1e', color: '#fff'
+                    });
+                }
+            }
         }
 
-        // --- HÀM XỬ lý LIÊN HỆ ADMIN ---
+        // --- HÀM XỬ lý LIÊN HỆ ADMIN (NÂNG CẤP GIAO DIỆN & HIỆU ỨNG) ---
         window.showContactPopup = function() {
             // --- CẤU HÌNH ẢNH USER TẠI ĐÂY ---
             const imgUser1 = "duytran1.jpg"; 
