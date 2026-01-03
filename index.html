@@ -31,7 +31,7 @@
                         'glow': 'glow 2s ease-in-out infinite alternate',
                         'fade-in': 'fadeIn 0.8s ease-out forwards',
                         'pulse-gold': 'pulseGold 2s infinite',
-                        'nebula': 'nebula 15s linear infinite', // Animation mới cho nền
+                        'nebula': 'nebula 15s linear infinite',
                     },
                     keyframes: {
                         float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-20px)' } },
@@ -134,7 +134,7 @@
         .spinner { width: 50px; height: 50px; border: 3px solid rgba(212, 175, 55, 0.3); border-radius: 50%; border-top-color: #D4AF37; animation: spin 1s ease-in-out infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
-        /* Popup rộng hơn cho phần liên hệ */
+        /* Popup Styles */
         div:where(.swal2-container) div:where(.swal2-popup) {
             width: 95% !important;
             max-width: 1000px !important;
@@ -145,7 +145,7 @@
         .swal2-container { z-index: 20000 !important; }
         .swal2-html-container { margin: 0 !important; overflow: visible !important; }
 
-        /* --- NEW: RUNNING BORDER & GLOWING EFFECT CSS --- */
+        /* --- USER CARD STYLES --- */
         @keyframes rotate-border {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -153,14 +153,13 @@
 
         .user-card-glow {
             position: relative;
-            background: #111827; /* Gray-900 base */
+            background: #111827; 
             overflow: hidden;
             z-index: 1;
             border-radius: 2rem;
             box-shadow: 0 20px 60px -10px rgba(0,0,0,0.8);
         }
 
-        /* 1. Viền LED chạy (Lớp dưới cùng) */
         .user-card-glow::before {
             content: '';
             position: absolute;
@@ -168,35 +167,25 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: conic-gradient(
-                transparent 0deg, 
-                transparent 90deg, 
-                var(--glow-color-1) 130deg, 
-                var(--glow-color-2) 180deg, 
-                transparent 270deg
-            );
+            background: conic-gradient(transparent 0deg, transparent 90deg, var(--glow-color-1) 130deg, var(--glow-color-2) 180deg, transparent 270deg);
             animation: rotate-border 4s linear infinite;
             z-index: 0;
         }
 
-        /* 2. Lớp nền che ở giữa (Background Mask) */
-        /* Đã chỉnh độ trong suốt để lộ hiệu ứng nền bên trong */
         .user-card-glow::after {
             content: '';
             position: absolute;
-            inset: 3px; /* Độ dày viền */
-            background: rgba(17, 24, 39, 0.9); /* Hơi trong suốt để thấy background động bên trong */
+            inset: 3px; 
+            background: rgba(17, 24, 39, 0.9);
             border-radius: calc(2rem - 3px);
             z-index: 0;
             backdrop-filter: blur(20px);
         }
         
-        /* 3. Hiệu ứng chữ phát sáng */
         .text-glow-effect {
             text-shadow: 0 0 10px var(--glow-color-1), 0 0 20px var(--glow-color-1), 0 0 40px var(--glow-color-2);
         }
 
-        /* Nội dung nổi lên trên */
         .user-content-layer {
             position: relative;
             z-index: 10;
@@ -208,16 +197,8 @@
 
         .user-card-glow:hover::before {
             animation-duration: 1.5s;
-            background: conic-gradient(
-                transparent 0deg, 
-                transparent 45deg, 
-                var(--glow-color-1) 100deg, 
-                var(--glow-color-2) 180deg,
-                var(--glow-color-1) 260deg,
-                transparent 360deg
-            );
+            background: conic-gradient(transparent 0deg, transparent 45deg, var(--glow-color-1) 100deg, var(--glow-color-2) 180deg, var(--glow-color-1) 260deg, transparent 360deg);
         }
-        /* --- END NEW CSS --- */
 
     </style>
 </head>
@@ -233,7 +214,7 @@
         </div>
     </div>
 
-    <!-- Fixed Support Button (NEW) -->
+    <!-- Fixed Support Button -->
     <div class="support-fixed">
         <div class="support-main-btn" onclick="showContactPopup()" title="Liên hệ Admin">
             <i class="fa-solid fa-headset"></i>
@@ -251,11 +232,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <div class="flex items-center cursor-pointer group" onclick="router('home')">
-                    <!-- LOGO TIM VÀNG -->
                     <div class="mr-3 text-gold-400 group-hover:scale-110 transition duration-300 drop-shadow-[0_0_10px_rgba(212,175,55,0.5)]">
                         <i class="fa-solid fa-heart text-3xl"></i>
                     </div>
-                    <!-- CHỮ TRÊN 1 DÒNG -->
                     <div>
                         <span class="text-2xl font-black tracking-wide leading-none text-white">LOCKET <span class="text-gradient-gold">GOLD</span></span>
                     </div>
@@ -275,7 +254,6 @@
         <!-- VIEW: LANDING PAGE -->
         <div id="view-home" class="section-view active">
             <div class="text-center mt-4 lg:mt-16 max-w-5xl mx-auto">
-                <!-- BADGE -->
                 <div class="inline-flex items-center px-4 py-2 rounded-full border border-gold-400/30 bg-gold-400/5 text-gold-300 text-xs font-bold uppercase tracking-wider mb-8 animate-fade-in backdrop-blur-md">
                     <span class="w-2 h-2 rounded-full bg-green-400 mr-2 animate-pulse"></span>
                     Phiên bản Vĩnh Viễn
@@ -403,7 +381,7 @@
                     </div>
                 </div>
 
-                <!-- CODE LOCKET GOLD -->
+                <!-- CODE LOCKET GOLD (ĐÃ CẬP NHẬT: ẨN LINK) -->
                 <div class="max-w-3xl mx-auto mt-8">
                     <div class="glass-panel p-6 rounded-3xl border border-gold-400/30 bg-gold-900/10 flex flex-col md:flex-row items-center justify-between gap-4">
                         <div class="flex items-center gap-4 text-left">
@@ -411,12 +389,13 @@
                                 <i class="fa-solid fa-code"></i>
                             </div>
                             <div>
-                                <h3 class="text-xl font-bold text-gold-300">CODE LOCKET GOLD</h3>
-                                <p class="text-gray-400 text-xs">Module Kích Hoạt Locket Gold Bản Quyền.</p>
+                                <h3 class="text-xl font-bold text-gold-300">MODULE LOCKET GOLD</h3>
+                                <p class="text-gray-400 text-xs">Cài đặt trực tiếp vào Shadowrocket/Loon (Link ẩn).</p>
                             </div>
                         </div>
-                        <button onclick="copyGoldCode()" class="bg-gray-800 hover:bg-gray-700 border border-gray-600 text-white font-bold py-3 px-6 rounded-xl transition flex items-center gap-2 min-w-[150px] justify-center">
-                            <i class="fa-regular fa-copy"></i> SAO CHÉP MÃ
+                        <!-- Nút này giờ sẽ gọi hàm Cài đặt thay vì Copy -->
+                        <button onclick="installModule()" class="bg-gradient-to-r from-gold-500 to-yellow-600 hover:from-gold-400 hover:to-yellow-500 border border-gold-300 text-black font-black py-3 px-6 rounded-xl transition flex items-center gap-2 min-w-[150px] justify-center shadow-lg shadow-gold-500/20">
+                            <i class="fa-solid fa-bolt"></i> CÀI ĐẶT MODULE
                         </button>
                     </div>
                 </div>
@@ -483,6 +462,14 @@
                                 <label class="text-xs text-white font-bold block mb-1">Link APK (Android)</label>
                                 <input type="text" id="admin-link-android" class="w-full input-gold p-3 rounded-lg text-xs" placeholder="https://.../game.apk">
                             </div>
+                            
+                            <!-- MỤC MỚI: LINK MODULE BẢO MẬT -->
+                            <div class="pt-4 border-t border-gray-700">
+                                <label class="text-xs text-gold-400 font-bold block mb-1">Link Module .sgmodule (Bảo Mật)</label>
+                                <input type="text" id="admin-module-link" class="w-full input-gold p-3 rounded-lg text-xs" placeholder="https://.../LocketGold.sgmodule">
+                                <p class="text-[10px] text-gray-500 mt-1">*Link này sẽ được giấu kín, khách hàng không thấy được.</p>
+                            </div>
+
                             <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white w-full py-3 rounded-lg text-sm font-bold shadow-lg transition">LƯU CẤU HÌNH</button>
                         </form>
                         
@@ -544,8 +531,9 @@
         const ADMIN_PASS = 'duongpizza';
         const DEVICE_ID_KEY = 'locket_device_id';
 
-        // Biến toàn cục để lưu key vừa xác thực thành công
+        // Biến toàn cục để lưu key và LINK ẨN
         window.currentUserKey = "";
+        window.secretModuleLink = ""; // Biến này sẽ chứa link thật, nhưng user không thấy trên giao diện
 
         // Khởi tạo Firebase
         try {
@@ -607,10 +595,10 @@
                     updateIOSButton();
                 } else {
                     try {
-                        await setDoc(docRef, { ios: "", android: "" });
-                        window.cloudConfig = { ios: "", android: "" };
+                        await setDoc(docRef, { ios: "", android: "", moduleLink: "" });
+                        window.cloudConfig = { ios: "", android: "", moduleLink: "" };
                     } catch(err) {
-                        window.cloudConfig = { ios: "", android: "" };
+                        window.cloudConfig = { ios: "", android: "", moduleLink: "" };
                     }
                 }
                 hideLoading();
@@ -637,25 +625,6 @@
             } else {
                 btn.setAttribute('href', '#');
             }
-        }
-
-        // --- CƠ CHẾ NÚT CÀI ĐẶT CỔ ĐIỂN ---
-        // Chỉ check link, không can thiệp sự kiện click
-        window.checkIOSLink = function(e) {
-            const btn = e.currentTarget;
-            const link = btn.getAttribute('href');
-
-            if (!link || link === '#' || link.length < 10) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Chưa có Link',
-                    text: 'Admin chưa cập nhật link cài đặt iOS.',
-                    background: '#1e1e1e', color: '#fff'
-                });
-                return false;
-            }
-            return true;
         }
 
         window.router = function(view) {
@@ -690,10 +659,7 @@
             Swal.fire({ title: 'Đang kiểm tra...', didOpen: () => Swal.showLoading(), background: '#1e1e1e', color: '#fff' });
 
             try {
-                // Lấy thông tin môi trường
-                const userIP = await getClientIP();
-                const userDevice = getDeviceModel();
-
+                // 1. Xác thực Key
                 const keyRef = doc(db, "keys", inputKey);
                 const keySnap = await getDoc(keyRef);
 
@@ -703,9 +669,13 @@
                 }
 
                 const keyData = keySnap.data();
+                const userIP = await getClientIP();
+                const userDevice = getDeviceModel();
+
                 if (keyData.isUsed) {
                     if (keyData.deviceId === currentDeviceID) {
-                        // Xác thực thành công: Lưu key vào bộ nhớ tạm
+                        // OK -> Lấy Link Module về
+                        await fetchModuleLink();
                         window.currentUserKey = inputKey;
                         showDownloadPage();
                         Swal.close();
@@ -713,7 +683,6 @@
                         Swal.fire({ icon: 'warning', title: 'Bị từ chối', text: 'Key đã dùng trên máy khác.', background: '#1e1e1e', color: '#fff' });
                     }
                 } else {
-                    // Cập nhật thêm IP và Device khi kích hoạt lần đầu
                     await updateDoc(keyRef, { 
                         isUsed: true, 
                         deviceId: currentDeviceID, 
@@ -721,7 +690,9 @@
                         ip: userIP,
                         deviceType: userDevice
                     });
-                    // Xác thực thành công lần đầu: Lưu key vào bộ nhớ tạm
+                    
+                    // Lần đầu kích hoạt -> Cũng lấy link module về
+                    await fetchModuleLink();
                     window.currentUserKey = inputKey;
                     Swal.fire({ icon: 'success', title: 'Thành công!', timer: 1500, showConfirmButton: false, background: '#1e1e1e', color: '#fff' })
                     .then(() => showDownloadPage());
@@ -729,6 +700,20 @@
             } catch (error) {
                 console.error(error);
                 Swal.fire({ icon: 'error', title: 'Lỗi', text: error.message, background: '#1e1e1e', color: '#fff' });
+            }
+        }
+
+        // --- HÀM LẤY LINK MODULE TỪ DATABASE (QUAN TRỌNG) ---
+        async function fetchModuleLink() {
+            try {
+                const docSnap = await getDoc(doc(db, "system", "config"));
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    // Lưu link vào biến bộ nhớ, KHÔNG in ra console, KHÔNG lưu localStorage
+                    window.secretModuleLink = data.moduleLink || "";
+                }
+            } catch(e) {
+                console.error("Lỗi lấy config module");
             }
         }
 
@@ -744,6 +729,7 @@
             e.preventDefault();
             const ios = document.getElementById('admin-link-ios').value.trim();
             const android = document.getElementById('admin-link-android').value.trim();
+            const moduleLink = document.getElementById('admin-module-link').value.trim(); // Lấy link module
 
             if (ios && ios.includes('.ipa')) {
                  if (!ios.includes('itms-services') && !ios.includes('.plist')) {
@@ -756,9 +742,9 @@
                 const oldData = window.cloudConfig || {};
                 await setDoc(doc(db, "system", "config"), { 
                     ...oldData,
-                    ios, android 
+                    ios, android, moduleLink 
                 });
-                window.cloudConfig = { ...oldData, ios, android };
+                window.cloudConfig = { ...oldData, ios, android, moduleLink };
                 updateIOSButton();
                 Swal.fire({ icon: 'success', title: 'Đã lưu!', toast: true, position: 'top-end', timer: 2000, background: '#1e1e1e', color: '#fff' });
             } catch (error) {
@@ -795,13 +781,15 @@
             if (window.cloudConfig) {
                 document.getElementById('admin-link-ios').value = window.cloudConfig.ios || "";
                 document.getElementById('admin-link-android').value = window.cloudConfig.android || "";
+                document.getElementById('admin-module-link').value = window.cloudConfig.moduleLink || "";
             } else {
                 try {
                     const snap = await getDoc(doc(db, "system", "config"));
                     if(snap.exists()) {
                         const d = snap.data();
-                        document.getElementById('admin-link-ios').value = d.ios;
-                        document.getElementById('admin-link-android').value = d.android;
+                        document.getElementById('admin-link-ios').value = d.ios || "";
+                        document.getElementById('admin-link-android').value = d.android || "";
+                        document.getElementById('admin-module-link').value = d.moduleLink || "";
                     }
                 } catch(e) {}
             }
@@ -889,24 +877,47 @@
             document.getElementById('tool-plist-output').value = plist;
         }
 
-        // --- HÀM COPY MODULE CODE ---
-        window.copyGoldCode = function() {
-            const codeLink = "https://raw.githubusercontent.com/DuongDarkFlippervgu/LK-GOLd/refs/heads/main/modules/LocketGold_NMDuong.sgmodule";
-            navigator.clipboard.writeText(codeLink).then(() => {
+        // --- HÀM CÀI ĐẶT MODULE (THAY THẾ HÀM COPY) ---
+        // Hàm này sẽ dùng link ẩn đã lấy được để kích hoạt cài đặt
+        window.installModule = function() {
+            // Kiểm tra xem đã có link ẩn chưa
+            if (!window.secretModuleLink || window.secretModuleLink.length < 5) {
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Thành công!',
-                    text: 'Đã Copy Vào Bộ Nhớ Tạm!',
-                    background: '#1e1e1e', color: '#fff',
-                    timer: 2000,
-                    showConfirmButton: false
+                    icon: 'error',
+                    title: 'Lỗi Link',
+                    text: 'Admin chưa cập nhật Module, hoặc bạn chưa nhập Key!',
+                    background: '#1e1e1e', color: '#fff'
                 });
-            }).catch(err => {
-                Swal.fire('Lỗi', 'Không thể copy, vui lòng thử lại', 'error');
+                return;
+            }
+
+            // Logic: Cố gắng mở Scheme của Shadowrocket hoặc Loon với link ẩn
+            // Shadowrocket scheme: shadowrocket://install?url=...
+            const shadowrocketUrl = `shadowrocket://install?url=${window.secretModuleLink}`;
+            
+            // Hỏi người dùng muốn làm gì
+            Swal.fire({
+                title: 'Chọn Phương Thức',
+                text: 'Bạn muốn cài module bằng cách nào?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Mở Shadowrocket',
+                cancelButtonText: 'Tải File Về',
+                background: '#1e1e1e', color: '#fff'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Cách 1: Mở app trực tiếp (Link không hiện trên thanh địa chỉ)
+                    window.location.href = shadowrocketUrl;
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    // Cách 2: Tải file về (Ẩn URL gốc bằng cách dùng Blob/fetch nếu có thể, hoặc mở tab mới)
+                    // Vì là cross-origin nên fetch thường bị chặn, ta mở tab mới là an toàn nhất
+                    // Tuy nhiên để bảo mật tối đa, ta dùng window.open
+                    window.open(window.secretModuleLink, '_blank');
+                }
             });
         }
 
-        // --- HÀM XỬ lý LIÊN HỆ ADMIN (NÂNG CẤP GIAO DIỆN & HIỆU ỨNG) ---
+        // --- HÀM XỬ lý LIÊN HỆ ADMIN ---
         window.showContactPopup = function() {
             // --- CẤU HÌNH ẢNH USER TẠI ĐÂY ---
             const imgUser1 = "duytran1.jpg"; 
@@ -1046,10 +1057,8 @@
 
         // --- HÀM LẤY MÃ 2FA (CẬP NHẬT LOGIC NÚT DÙNG KEY HIỆN TẠI) ---
         window.get2FACode = async function() {
-            // Chuẩn bị nội dung HTML cho popup
             let htmlContent = '<p style="color: #bbb; font-size: 0.9em; margin-bottom: 1em;">Nhập Key bản quyền để lấy mã xác minh riêng.</p>';
             
-            // Nếu đã có key vừa đăng nhập, thêm nút chọn nhanh
             if (window.currentUserKey) {
                 htmlContent += `
                     <button type="button" id="btn-use-current-key" 
@@ -1066,19 +1075,17 @@
                 title: 'NHẬP KEY CỦA BẠN',
                 input: 'text',
                 inputPlaceholder: 'XXXX-XXXX-XXXX-XXXX',
-                html: htmlContent, // Sử dụng HTML thay vì text thuần
+                html: htmlContent, 
                 background: '#1e1e1e', color: '#fff',
                 confirmButtonColor: '#28a745',
                 showCancelButton: true,
                 didOpen: () => {
-                    // Gán sự kiện click cho nút dùng key hiện tại
                     const btn = document.getElementById('btn-use-current-key');
                     if(btn) {
                         btn.addEventListener('click', () => {
                             const input = Swal.getInput();
                             if(input) {
                                 input.value = window.currentUserKey;
-                                // Tự động focus lại vào input để người dùng thấy
                                 input.focus();
                             }
                         });
