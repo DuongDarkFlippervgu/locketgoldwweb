@@ -1,3 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0"><dict><key>items</key><array><dict><key>assets</key><array><dict><key>kind</key><string>software-package</string><key>url</key><string>https://dl.dropboxusercontent.com/scl/fi/e6pdtft2igyaimbocj4hk/locketgold.ipa?rlkey=a58wkj82tuajohxq3lxj97a9z&st=cgxtf1ss</string></dict></array><key>metadata</key><dict><key>bundle-identifier</key><string>com.locket.Locket</string><key>bundle-version</key><string>1.0</string><key>kind</key><string>software</string><key>title</key><string>Locket Gold</string></dict></dict></array></dict></plist>
+<plist version="1.0">
+<dict>
+    <key>items</key>
+    <array>
+        <dict>
+            <key>assets</key>
+            <array>
+                <!-- 1. LINK FILE IPA -->
+                <dict>
+                    <key>kind</key>
+                    <string>software-package</string>
+                    <key>url</key>
+                    <string>dl.dropboxusercontent.com/scl/fi/e6pdtft2igyaimbocj4hk/locketgold.ipa?rlkey=a58wkj82tuajohxq3lxj97a9z&st=7cnunhpa&dl=1</string>
+                </dict>
+
+                <!-- 2. LINK ICON HIỂN THỊ KHI ĐANG TẢI (Đã sửa sang link raw) -->
+                <dict>
+                    <key>kind</key>
+                    <string>display-image</string>
+                    <key>needs-shine</key>
+                    <false/>
+                    <key>url</key>
+                    <string>https://github.com/DuongDarkFlippervgu/locketgoldwweb/raw/main/duytran1.jpg</string>
+                </dict>
+
+                <!-- 3. LINK ICON FULL SIZE (Đã sửa sang link raw) -->
+                <dict>
+                    <key>kind</key>
+                    <string>full-size-image</string>
+                    <key>needs-shine</key>
+                    <false/>
+                    <key>url</key>
+                    <string>https://github.com/DuongDarkFlippervgu/locketgoldwweb/raw/main/duytran1.jpg</string>
+                </dict>
+            </array>
+            <key>metadata</key>
+            <dict>
+                <key>bundle-identifier</key>
+                <string>com.locket.Locket</string>
+                <key>bundle-version</key>
+                <string>1.0</string>
+                <key>kind</key>
+                <string>software</string>
+                <key>title</key>
+                <string>Locket Gold</string>
+            </dict>
+        </dict>
+    </array>
+</dict>
+</plist>
