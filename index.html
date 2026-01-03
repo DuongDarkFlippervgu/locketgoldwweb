@@ -31,12 +31,14 @@
                         'glow': 'glow 2s ease-in-out infinite alternate',
                         'fade-in': 'fadeIn 0.8s ease-out forwards',
                         'pulse-gold': 'pulseGold 2s infinite',
+                        'nebula': 'nebula 15s linear infinite', // Animation mới cho nền
                     },
                     keyframes: {
                         float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-20px)' } },
                         glow: { 'from': { boxShadow: '0 0 10px #D4AF37, 0 0 20px #D4AF37' }, 'to': { boxShadow: '0 0 20px #FFD700, 0 0 30px #FFD700' } },
                         fadeIn: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
-                        pulseGold: { '0%': { boxShadow: '0 0 0 0 rgba(212, 175, 55, 0.4)' }, '70%': { boxShadow: '0 0 0 10px rgba(212, 175, 55, 0)' }, '100%': { boxShadow: '0 0 0 0 rgba(212, 175, 55, 0)' } }
+                        pulseGold: { '0%': { boxShadow: '0 0 0 0 rgba(212, 175, 55, 0.4)' }, '70%': { boxShadow: '0 0 0 10px rgba(212, 175, 55, 0)' }, '100%': { boxShadow: '0 0 0 0 rgba(212, 175, 55, 0)' } },
+                        nebula: { '0%': { transform: 'scale(1) rotate(0deg)' }, '50%': { transform: 'scale(1.2) rotate(180deg)' }, '100%': { transform: 'scale(1) rotate(360deg)' } }
                     }
                 }
             }
@@ -100,7 +102,7 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
-        /* Support Button Fixed (New) */
+        /* Support Button Fixed */
         .support-fixed {
             position: fixed;
             bottom: 20px;
@@ -135,15 +137,15 @@
         /* Popup rộng hơn cho phần liên hệ */
         div:where(.swal2-container) div:where(.swal2-popup) {
             width: 95% !important;
-            max-width: 1000px !important; /* Rộng hơn nữa để các thẻ không đè nhau */
+            max-width: 1000px !important;
             padding: 0 !important;
             border-radius: 2rem !important;
-            overflow: visible !important; /* Để hiệu ứng không bị cắt */
+            overflow: visible !important;
         }
         .swal2-container { z-index: 20000 !important; }
         .swal2-html-container { margin: 0 !important; overflow: visible !important; }
 
-        /* --- NEW: RUNNING BORDER ANIMATION CSS (UPDATED FOR BETTER LED EFFECT) --- */
+        /* --- NEW: RUNNING BORDER & GLOWING EFFECT CSS --- */
         @keyframes rotate-border {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -152,13 +154,13 @@
         .user-card-glow {
             position: relative;
             background: #111827; /* Gray-900 base */
-            overflow: hidden; /* Cần thiết để bo góc cho ::before */
+            overflow: hidden;
             z-index: 1;
-            border-radius: 2rem; /* Bo góc cho cả khối */
+            border-radius: 2rem;
             box-shadow: 0 20px 60px -10px rgba(0,0,0,0.8);
         }
 
-        /* Lớp gradient xoay tròn bên dưới */
+        /* 1. Viền LED chạy (Lớp dưới cùng) */
         .user-card-glow::before {
             content: '';
             position: absolute;
@@ -166,7 +168,6 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            /* Gradient tạo hiệu ứng vệt sáng chạy */
             background: conic-gradient(
                 transparent 0deg, 
                 transparent 90deg, 
@@ -178,17 +179,23 @@
             z-index: 0;
         }
 
-        /* Lớp nền che ở giữa để tạo viền */
+        /* 2. Lớp nền che ở giữa (Background Mask) */
+        /* Đã chỉnh độ trong suốt để lộ hiệu ứng nền bên trong */
         .user-card-glow::after {
             content: '';
             position: absolute;
-            inset: 3px; /* Độ dày viền LED */
-            background: rgba(17, 24, 39, 0.95); /* Màu nền trùng body card, hơi trong suốt */
-            border-radius: calc(2rem - 3px); /* Bo góc trừ đi độ dày viền */
+            inset: 3px; /* Độ dày viền */
+            background: rgba(17, 24, 39, 0.9); /* Hơi trong suốt để thấy background động bên trong */
+            border-radius: calc(2rem - 3px);
             z-index: 0;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px);
         }
         
+        /* 3. Hiệu ứng chữ phát sáng */
+        .text-glow-effect {
+            text-shadow: 0 0 10px var(--glow-color-1), 0 0 20px var(--glow-color-1), 0 0 40px var(--glow-color-2);
+        }
+
         /* Nội dung nổi lên trên */
         .user-content-layer {
             position: relative;
@@ -200,7 +207,7 @@
         }
 
         .user-card-glow:hover::before {
-            animation-duration: 1.5s; /* Chạy nhanh hơn khi hover */
+            animation-duration: 1.5s;
             background: conic-gradient(
                 transparent 0deg, 
                 transparent 45deg, 
@@ -208,7 +215,7 @@
                 var(--glow-color-2) 180deg,
                 var(--glow-color-1) 260deg,
                 transparent 360deg
-            ); /* Hiệu ứng sáng hơn khi hover */
+            );
         }
         /* --- END NEW CSS --- */
 
@@ -221,7 +228,7 @@
         <div class="spinner mb-4"></div>
         <div class="text-gold-400 font-bold tracking-widest text-sm uppercase" id="loading-text">Đang kết nối Server...</div>
         <div id="error-message" class="hidden mt-6 text-center px-4 max-w-md">
-             <p class="text-white font-bold text-lg mb-2">CHƯA CẤU HÌNH DATABASE</p>
+             <p class="text-white font-bold text-lg mb-2">CHƯA CẤU HÌNH DATABASE!</p>
              <button onclick="setupFirebaseUI()" class="btn-gold px-6 py-3 rounded-full text-sm">Cấu Hình Ngay</button>
         </div>
     </div>
@@ -279,7 +286,7 @@
                 </h1>
                 
                 <p class="text-gray-400 text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed animate-fade-in" style="animation-delay: 0.2s;">
-                   ❤️‍🔥 Mở Khóa Toàn Bộ Tính Năng Cao Cấp ❤️‍🔥
+                    ❤️‍🔥 Mở Khóa Toàn Bộ Tính Năng Cao Cấp ❤️‍🔥
                 </p>
 
                 <div class="flex flex-col md:flex-row items-center justify-center gap-6 animate-fade-in" style="animation-delay: 0.3s;">
@@ -501,6 +508,8 @@
                                 <thead class="text-gray-400 bg-black/20 sticky top-0 backdrop-blur-md z-10">
                                     <tr>
                                         <th class="p-3 rounded-tl-lg">Key Code</th>
+                                        <th class="p-3">IP</th>
+                                        <th class="p-3">Device</th>
                                         <th class="p-3">Mã 2FA</th>
                                         <th class="p-3">Hành động</th>
                                     </tr>
@@ -535,6 +544,9 @@
         const ADMIN_PASS = 'duongpizza';
         const DEVICE_ID_KEY = 'locket_device_id';
 
+        // Biến toàn cục để lưu key vừa xác thực thành công
+        window.currentUserKey = "";
+
         // Khởi tạo Firebase
         try {
             app = initializeApp(firebaseConfig);
@@ -558,6 +570,32 @@
                 setTimeout(() => loading.style.display = 'none', 500);
             }
         }
+
+        // --- NEW HELPERS ---
+        // Hàm lấy IP
+        async function getClientIP() {
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                return data.ip;
+            } catch(e) {
+                console.warn("Không lấy được IP", e);
+                return "Unknown";
+            }
+        }
+
+        // Hàm phát hiện loại máy
+        function getDeviceModel() {
+            const ua = navigator.userAgent;
+            let device = "PC";
+            if(/Android/i.test(ua)) device = "Android";
+            else if(/iPhone/i.test(ua)) device = "iPhone";
+            else if(/iPad/i.test(ua)) device = "iPad";
+            else if(/Mac/i.test(ua)) device = "Mac";
+            else if(/Windows/i.test(ua)) device = "Windows";
+            return device;
+        }
+        // -------------------
 
         async function loadConfigFromCloud() {
             try {
@@ -652,6 +690,10 @@
             Swal.fire({ title: 'Đang kiểm tra...', didOpen: () => Swal.showLoading(), background: '#1e1e1e', color: '#fff' });
 
             try {
+                // Lấy thông tin môi trường
+                const userIP = await getClientIP();
+                const userDevice = getDeviceModel();
+
                 const keyRef = doc(db, "keys", inputKey);
                 const keySnap = await getDoc(keyRef);
 
@@ -663,13 +705,24 @@
                 const keyData = keySnap.data();
                 if (keyData.isUsed) {
                     if (keyData.deviceId === currentDeviceID) {
+                        // Xác thực thành công: Lưu key vào bộ nhớ tạm
+                        window.currentUserKey = inputKey;
                         showDownloadPage();
                         Swal.close();
                     } else {
                         Swal.fire({ icon: 'warning', title: 'Bị từ chối', text: 'Key đã dùng trên máy khác.', background: '#1e1e1e', color: '#fff' });
                     }
                 } else {
-                    await updateDoc(keyRef, { isUsed: true, deviceId: currentDeviceID, usedAt: new Date().toISOString() });
+                    // Cập nhật thêm IP và Device khi kích hoạt lần đầu
+                    await updateDoc(keyRef, { 
+                        isUsed: true, 
+                        deviceId: currentDeviceID, 
+                        usedAt: new Date().toISOString(),
+                        ip: userIP,
+                        deviceType: userDevice
+                    });
+                    // Xác thực thành công lần đầu: Lưu key vào bộ nhớ tạm
+                    window.currentUserKey = inputKey;
                     Swal.fire({ icon: 'success', title: 'Thành công!', timer: 1500, showConfirmButton: false, background: '#1e1e1e', color: '#fff' })
                     .then(() => showDownloadPage());
                 }
@@ -813,6 +866,8 @@
                         tr.className = 'border-b border-gray-800 hover:bg-white/5 transition';
                         tr.innerHTML = `
                             <td class="p-3 font-mono text-gold-300 font-bold">${k.code}</td>
+                            <td class="p-3 text-gray-400 text-xs">${k.ip || 'N/A'}</td>
+                            <td class="p-3 text-gold-400 text-xs font-bold">${k.deviceType || 'N/A'}</td>
                             <td class="p-3 font-mono text-green-400">${k.apple2FA || '-'}</td>
                             <td class="p-3 text-right flex gap-2 justify-end">
                                 <button onclick="send2FAForKey('${k.code}')" class="text-green-500 hover:text-green-300 p-1 border border-green-500 rounded px-2 text-xs font-bold">GỬI 2FA</button>
@@ -851,12 +906,11 @@
             });
         }
 
-        // --- HÀM XỬ lý LIÊN HỆ ADMIN (CẬP NHẬT GIAO DIỆN & VIỀN LED & QR CODE) ---
+        // --- HÀM XỬ lý LIÊN HỆ ADMIN (NÂNG CẤP GIAO DIỆN & HIỆU ỨNG) ---
         window.showContactPopup = function() {
             // --- CẤU HÌNH ẢNH USER TẠI ĐÂY ---
-            // Fallback sang UI Avatars nếu ảnh lỗi để đảm bảo đẹp
-            const imgUser1 = "duytran.jpg"; 
-            const imgUser2 = "minhduong.jpg"; // Đã sửa thành tên file đơn giản để bạn dễ thay
+            const imgUser1 = "duytran1.jpg"; 
+            const imgUser2 = "minhduong.jpg"; 
             const imgUser3 = "trungduc1.jpg"; 
             
             // Link Logo Zalo
@@ -879,19 +933,24 @@
                         <div class="user-card-glow order-2 md:order-1 group p-6 w-full md:w-[32%] transition duration-300 transform hover:-translate-y-3"
                              style="--glow-color-1: #3b82f6; --glow-color-2: #60a5fa;">
                              
-                             <div class="user-content-layer">
+                             <!-- NỀN ĐỘNG BÊN TRONG -->
+                             <div class="absolute inset-[3px] rounded-[calc(2rem-3px)] z-[1] overflow-hidden pointer-events-none">
+                                <div class="absolute -top-[20%] -left-[20%] w-[140%] h-[140%] bg-[radial-gradient(circle,var(--glow-color-1)_0%,transparent_60%)] opacity-10 blur-xl animate-nebula"></div>
+                             </div>
+
+                             <div class="user-content-layer z-10 relative">
                                  <div class="absolute -top-3 bg-blue-900/90 text-blue-100 text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest border border-blue-500/40 backdrop-blur-md shadow-lg shadow-blue-900/40">Support Team</div>
                                  
                                  <div class="w-24 h-24 rounded-full border-[3px] border-blue-500/50 mb-4 mt-4 overflow-hidden shadow-[0_0_20px_rgba(59,130,246,0.5)] group-hover:border-blue-400 transition duration-300 relative bg-black">
                                     <img src="${imgUser1}" onerror="this.src='${defaultAvatar}'" class="w-full h-full object-cover">
                                  </div>
                                  
-                                 <h4 class="text-white font-bold text-xl mb-1 drop-shadow-md">DUY TRẦN</h4>
-                                 <p class="text-blue-400 text-xs mb-6 font-semibold uppercase tracking-wider bg-blue-500/10 px-3 py-1 rounded-lg border border-blue-500/20">Hỗ trợ Kỹ thuật</p>
+                                 <h4 class="text-white font-bold text-xl mb-1 text-glow-effect">DUY TRẦN</h4>
+                                 <p class="text-blue-400 text-xs mb-6 font-semibold uppercase tracking-wider bg-blue-500/10 px-3 py-1 rounded-lg border border-blue-500/20 text-glow-effect">Hỗ trợ Kỹ thuật</p>
                                  
                                  <div class="mt-auto flex gap-4 justify-center w-full">
                                     <a href="https://www.facebook.com/duy.tran.44802" target="_blank" class="w-11 h-11 rounded-full bg-blue-600 flex items-center justify-center text-white hover:scale-110 hover:bg-blue-500 transition shadow-lg shadow-blue-900/50"><i class="fa-brands fa-facebook-f text-lg"></i></a>
-                                    <a href="https://zalo.me/" target="_blank" class="w-11 h-11 rounded-full bg-white flex items-center justify-center hover:scale-110 transition shadow-lg p-2"><img src="${zaloIconUrl}" class="w-full h-full object-contain"></a>
+                                    <a href="https://zalo.me/0392642572" target="_blank" class="w-11 h-11 rounded-full bg-white flex items-center justify-center hover:scale-110 transition shadow-lg p-2"><img src="${zaloIconUrl}" class="w-full h-full object-contain"></a>
                                  </div>
                              </div>
                         </div>
@@ -900,24 +959,26 @@
                         <div class="user-card-glow order-1 md:order-2 p-8 w-full md:w-[36%] transform md:scale-110 md:-translate-y-4 shadow-[0_0_60px_rgba(212,175,55,0.25)] z-20"
                              style="--glow-color-1: #D4AF37; --glow-color-2: #FFD700;">
                              
-                             <div class="user-content-layer">
+                             <!-- NỀN ĐỘNG BÊN TRONG -->
+                             <div class="absolute inset-[3px] rounded-[calc(2rem-3px)] z-[1] overflow-hidden pointer-events-none">
+                                <div class="absolute -top-[20%] -left-[20%] w-[140%] h-[140%] bg-[radial-gradient(circle,var(--glow-color-1)_0%,transparent_60%)] opacity-10 blur-xl animate-nebula"></div>
+                             </div>
+
+                             <div class="user-content-layer z-10 relative">
                                  <div class="absolute -top-4 bg-gradient-to-r from-gold-400 to-yellow-600 text-black text-xs font-black px-6 py-2 rounded-full uppercase tracking-[0.2em] shadow-lg shadow-gold-400/50 flex items-center gap-2 border border-white/20">
                                     <i class="fa-solid fa-crown"></i> LEADER <i class="fa-solid fa-crown"></i>
                                  </div>
                                  
                                  <div class="w-32 h-32 rounded-full border-[4px] border-gold-400 p-1.5 mb-5 mt-4 shadow-[0_0_40px_rgba(212,175,55,0.5)] relative bg-black group hover:scale-105 transition duration-500">
                                     <div class="w-full h-full rounded-full bg-gray-900 flex items-center justify-center overflow-hidden relative border border-gold-400/30">
-                                        <!-- Đã thêm onerror giống user 1 và 3 -->
                                         <img src="${imgUser2}" onerror="this.src='${defaultAvatar}'" class="w-full h-full object-cover opacity-90 hover:opacity-100 transition">
                                     </div>
                                     <div class="absolute bottom-2 right-2 w-7 h-7 bg-green-500 border-4 border-black rounded-full shadow-[0_0_15px_#22c55e]" title="Online"></div>
                                  </div>
 
-                                 <h4 class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-gold-100 via-yellow-300 to-gold-100 mb-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">MINH DƯƠNG</h4>
-                                 <p class="text-gold-500 text-xs mb-8 font-mono tracking-[0.2em] uppercase border-b border-gold-500/30 pb-1 font-bold">Administrator</p>
+                                 <h4 class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-gold-100 via-yellow-300 to-gold-100 mb-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] text-glow-effect" style="text-shadow: 0 0 25px rgba(212,175,55,0.5);">MINH DƯƠNG</h4>
+                                 <p class="text-gold-500 text-xs mb-8 font-mono tracking-[0.2em] uppercase border-b border-gold-500/30 pb-1 font-bold text-glow-effect">Administrator</p>
                                  
-                                 <!-- Đã xóa mục QR BANKING theo yêu cầu -->
-
                                  <div class="mt-auto flex gap-6 justify-center w-full">
                                     <a href="https://www.facebook.com/oatttophacsc" target="_blank" class="w-14 h-14 rounded-full bg-gradient-to-tr from-blue-700 to-blue-500 flex items-center justify-center text-white text-2xl hover:scale-110 hover:shadow-blue-500/60 transition shadow-xl shadow-blue-500/30 border border-white/10"><i class="fa-brands fa-facebook-f"></i></a>
                                     <a href="https://zalo.me/0974784207" target="_blank" class="w-14 h-14 rounded-full bg-white flex items-center justify-center hover:scale-110 hover:shadow-white/50 transition shadow-xl shadow-white/20 p-2.5 border-2 border-gray-200"><img src="${zaloIconUrl}" class="w-full h-full object-contain"></a>
@@ -929,19 +990,24 @@
                         <div class="user-card-glow order-3 md:order-3 group p-6 w-full md:w-[32%] transition duration-300 transform hover:-translate-y-3"
                              style="--glow-color-1: #a855f7; --glow-color-2: #c084fc;">
                              
-                             <div class="user-content-layer">
+                             <!-- NỀN ĐỘNG BÊN TRONG -->
+                             <div class="absolute inset-[3px] rounded-[calc(2rem-3px)] z-[1] overflow-hidden pointer-events-none">
+                                <div class="absolute -top-[20%] -left-[20%] w-[140%] h-[140%] bg-[radial-gradient(circle,var(--glow-color-1)_0%,transparent_60%)] opacity-10 blur-xl animate-nebula"></div>
+                             </div>
+
+                             <div class="user-content-layer z-10 relative">
                                  <div class="absolute -top-3 bg-purple-900/90 text-purple-100 text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest border border-purple-500/40 backdrop-blur-md shadow-lg shadow-purple-900/40">Support Team</div>
                                  
                                  <div class="w-24 h-24 rounded-full border-[3px] border-purple-500/50 mb-4 mt-4 overflow-hidden shadow-[0_0_20px_rgba(168,85,247,0.5)] group-hover:border-purple-400 transition duration-300 relative bg-black">
                                     <img src="${imgUser3}" onerror="this.src='${defaultAvatar}'" class="w-full h-full object-cover">
                                  </div>
                                  
-                                 <h4 class="text-white font-bold text-xl mb-1 drop-shadow-md">TRUNG ĐỨC</h4>
-                                 <p class="text-purple-400 text-xs mb-6 font-semibold uppercase tracking-wider bg-purple-500/10 px-3 py-1 rounded-lg border border-purple-500/20">HỖ TRỢ KỸ THUẬT</p>
+                                 <h4 class="text-white font-bold text-xl mb-1 text-glow-effect">TRUNG ĐỨC</h4>
+                                 <p class="text-purple-400 text-xs mb-6 font-semibold uppercase tracking-wider bg-purple-500/10 px-3 py-1 rounded-lg border border-purple-500/20 text-glow-effect">Hỗ trợ Kỹ thuật</p>
                                  
                                  <div class="mt-auto flex gap-4 justify-center w-full">
                                     <a href="https://www.facebook.com/tran.nguyen.trung.uc.2024" target="_blank" class="w-11 h-11 rounded-full bg-blue-600 flex items-center justify-center text-white hover:scale-110 hover:bg-blue-500 transition shadow-lg shadow-blue-900/50"><i class="fa-brands fa-facebook-f text-lg"></i></a>
-                                    <a href="https://zalo.me/" target="_blank" class="w-11 h-11 rounded-full bg-white flex items-center justify-center hover:scale-110 transition shadow-lg p-2"><img src="${zaloIconUrl}" class="w-full h-full object-contain"></a>
+                                    <a href="https://zalo.me/0941210838" target="_blank" class="w-11 h-11 rounded-full bg-white flex items-center justify-center hover:scale-110 transition shadow-lg p-2"><img src="${zaloIconUrl}" class="w-full h-full object-contain"></a>
                                  </div>
                              </div>
                         </div>
@@ -978,16 +1044,46 @@
             });
         }
 
-        // --- HÀM LẤY MÃ 2FA (LOGIC MỚI) ---
+        // --- HÀM LẤY MÃ 2FA (CẬP NHẬT LOGIC NÚT DÙNG KEY HIỆN TẠI) ---
         window.get2FACode = async function() {
+            // Chuẩn bị nội dung HTML cho popup
+            let htmlContent = '<p style="color: #bbb; font-size: 0.9em; margin-bottom: 1em;">Nhập Key bản quyền để lấy mã xác minh riêng.</p>';
+            
+            // Nếu đã có key vừa đăng nhập, thêm nút chọn nhanh
+            if (window.currentUserKey) {
+                htmlContent += `
+                    <button type="button" id="btn-use-current-key" 
+                        class="swal2-confirm swal2-styled" 
+                        style="background-color: #333; border: 1px solid #555; width: 100%; margin: 0 0 1em 0; display: flex; justify-content: center; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-key" style="color: #D4AF37;"></i>
+                        <span>Sử dụng Key hiện tại: <b style="color: #D4AF37;">${window.currentUserKey}</b></span>
+                    </button>
+                    <div style="width: 100%; height: 1px; background: #333; margin-bottom: 1em;"></div>
+                `;
+            }
+
             const { value: keyInput } = await Swal.fire({
                 title: 'NHẬP KEY CỦA BẠN',
                 input: 'text',
                 inputPlaceholder: 'XXXX-XXXX-XXXX-XXXX',
-                text: 'Nhập Key bản quyền để lấy mã xác minh riêng.',
+                html: htmlContent, // Sử dụng HTML thay vì text thuần
                 background: '#1e1e1e', color: '#fff',
                 confirmButtonColor: '#28a745',
-                showCancelButton: true
+                showCancelButton: true,
+                didOpen: () => {
+                    // Gán sự kiện click cho nút dùng key hiện tại
+                    const btn = document.getElementById('btn-use-current-key');
+                    if(btn) {
+                        btn.addEventListener('click', () => {
+                            const input = Swal.getInput();
+                            if(input) {
+                                input.value = window.currentUserKey;
+                                // Tự động focus lại vào input để người dùng thấy
+                                input.focus();
+                            }
+                        });
+                    }
+                }
             });
 
             if (keyInput) {
@@ -999,7 +1095,6 @@
                     if (docSnap.exists()) {
                         const data = docSnap.data();
                         const code = data.apple2FA;
-                        // const time = data.apple2FATime; // Có thể check time nếu cần
                         
                         if (code) {
                             Swal.fire({
