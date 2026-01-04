@@ -1168,25 +1168,88 @@
             });
         }
 
-        // --- HÀM XỬ LÝ GET APPLE ID ---
+        // --- HÀM XỬ LÝ GET APPLE ID (ĐÃ CẬP NHẬT 9 BƯỚC + ẢNH) ---
         window.showAppleIdOptions = function() {
             Swal.fire({
-                title: '<strong style="color: #fff">Chọn thông tin cần Copy</strong>',
+                title: '<strong style="color: #fff; font-size: 1.5rem;">HƯỚNG DẪN LẤY APPLE ID</strong>',
                 background: '#1e1e1e',
+                width: '100%',
+                maxWidth: '600px',
                 html: `
-                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                        <button id="copy-apple-id" class="swal2-confirm swal2-styled" style="width: 100%; margin: 0; background-color: #333; border: 1px solid #555;">Copy ID APPLE</button>
-                        <button id="copy-apple-pass" class="swal2-confirm swal2-styled" style="width: 100%; margin: 0; background-color: #333; border: 1px solid #555;">Copy PASSWORD</button>
+                    <div style="text-align: left; color: #d1d5db; max-height: 60vh; overflow-y: auto; padding-right: 10px;">
+                        
+                        <!-- Bước 1 -->
+                        <div style="margin-bottom: 20px;">
+                            <p style="color: #D4AF37; font-weight: bold; margin-bottom: 8px;">Bước 1: Vào App Store</p>
+                            <img src="LINK_ANH_BUOC_1" style="width: 100%; border-radius: 10px; border: 1px solid #444;" alt="Ảnh minh họa bước 1">
+                        </div>
+
+                        <!-- Bước 2 -->
+                        <div style="margin-bottom: 20px;">
+                            <p style="color: #D4AF37; font-weight: bold; margin-bottom: 8px;">Bước 2: Ấn Vào Hình Tài Khoản (Góc Phải)</p>
+                            <img src="LINK_ANH_BUOC_2" style="width: 100%; border-radius: 10px; border: 1px solid #444;" alt="Ảnh minh họa bước 2">
+                        </div>
+
+                        <!-- Bước 3 -->
+                        <div style="margin-bottom: 20px;">
+                            <p style="color: #D4AF37; font-weight: bold; margin-bottom: 8px;">Bước 3: Kéo Xuống Cuối Cùng Chọn Đăng Xuất</p>
+                            <img src="LINK_ANH_BUOC_3" style="width: 100%; border-radius: 10px; border: 1px solid #444;" alt="Ảnh minh họa bước 3">
+                        </div>
+
+                        <!-- Bước 4 -->
+                        <div style="margin-bottom: 20px;">
+                            <p style="color: #D4AF37; font-weight: bold; margin-bottom: 8px;">Bước 4: Ấn Vào Đăng nhập bằng Tài khoản Apple</p>
+                            <img src="LINK_ANH_BUOC_4" style="width: 100%; border-radius: 10px; border: 1px solid #444;" alt="Ảnh minh họa bước 4">
+                        </div>
+
+                        <!-- Bước 5 -->
+                        <div style="margin-bottom: 20px;">
+                            <p style="color: #D4AF37; font-weight: bold; margin-bottom: 8px;">Bước 5: Chọn Mục "Không Phải Là [Tên Bạn]"</p>
+                            <img src="LINK_ANH_BUOC_5" style="width: 100%; border-radius: 10px; border: 1px solid #444;" alt="Ảnh minh họa bước 5">
+                        </div>
+
+                        <!-- Bước 6 (Quan Trọng - Copy) -->
+                        <div style="margin-bottom: 20px; background: rgba(212, 175, 55, 0.1); padding: 15px; border-radius: 15px; border: 1px solid rgba(212, 175, 55, 0.3);">
+                            <p style="color: #D4AF37; font-weight: bold; margin-bottom: 12px; text-transform: uppercase;">Bước 6: Sao Chép Tài Khoản</p>
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <button id="copy-apple-id" class="swal2-confirm swal2-styled" style="width: 100%; margin: 0; background-color: #333; border: 1px solid #555; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                    <i class="fa-regular fa-copy"></i> Copy ID: addilyn...
+                                </button>
+                                <button id="copy-apple-pass" class="swal2-confirm swal2-styled" style="width: 100%; margin: 0; background-color: #333; border: 1px solid #555; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                    <i class="fa-solid fa-key"></i> Copy Pass
+                                </button>
+                            </div>
+                            <p style="font-size: 10px; color: #aaa; margin-top: 8px; text-align: center;">*Quay lại App Store và dán vào ô đăng nhập</p>
+                        </div>
+
+                        <!-- Bước 7 -->
+                        <div style="margin-bottom: 20px;">
+                            <p style="color: #D4AF37; font-weight: bold; margin-bottom: 8px;">Bước 7: Bấm Tiếp Tục -> Chọn "Các Lựa Chọn Khác"</p>
+                            <img src="LINK_ANH_BUOC_7" style="width: 100%; border-radius: 10px; border: 1px solid #444;" alt="Ảnh minh họa bước 7">
+                        </div>
+
+                        <!-- Bước 8 -->
+                        <div style="margin-bottom: 20px;">
+                            <p style="color: #D4AF37; font-weight: bold; margin-bottom: 8px;">Bước 8: Chọn "Không Nâng Cấp"</p>
+                            <img src="LINK_ANH_BUOC_8" style="width: 100%; border-radius: 10px; border: 1px solid #444;" alt="Ảnh minh họa bước 8">
+                        </div>
+
+                        <!-- Bước 9 -->
+                        <div style="margin-bottom: 10px;">
+                            <p style="color: #D4AF37; font-weight: bold; margin-bottom: 8px;">Bước 9: Tìm và Tải App Shadowrocket</p>
+                            <img src="LINK_ANH_BUOC_9" style="width: 100%; border-radius: 10px; border: 1px solid #444;" alt="Ảnh minh họa bước 9">
+                        </div>
+
                     </div>
                 `,
                 showConfirmButton: false,
                 showCloseButton: true,
                 didOpen: () => {
                     document.getElementById('copy-apple-id').addEventListener('click', () => {
-                        window.copyText('duonglo6203@gmail.com', 'Đã Copy ID Apple!');
+                        window.copyText('addilynwhatley44300@hotmail.com', 'Đã Copy ID Apple!');
                     });
                     document.getElementById('copy-apple-pass').addEventListener('click', () => {
-                        window.copyText('Duongpizza2007&', 'Đã Copy Password!');
+                        window.copyText('Vf1sZVpSMW', 'Đã Copy Password!');
                     });
                 }
             });
