@@ -17,6 +17,66 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <!-- =============================================== -->
+    <!-- 🛡️ ANTI-INSPECT PROTECTION (CHỐNG SOI CODE) 🛡️ -->
+    <script>
+        // 1. Vô hiệu hóa chuột phải
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // 2. Vô hiệu hóa các phím tắt (F12, Ctrl+U, Ctrl+S, Ctrl+Shift+I...)
+        document.onkeydown = function(e) {
+            // F12
+            if (e.keyCode == 123) {
+                return false;
+            }
+            // Ctrl+I (Yêu thích), Ctrl+J, Ctrl+U (Soi code), Ctrl+S (Lưu)
+            if (e.ctrlKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 85 || e.keyCode === 83)) {
+                return false;
+            }
+            // Mac OS: Cmd+Option+I/U...
+            if (e.metaKey && (e.keyCode === 73 || e.keyCode === 85 || e.keyCode === 83)) {
+                return false;
+            }
+        };
+
+        // 3. Phát hiện DevTools mở (Console) - Gây lag nếu cố tình mở
+        (function() {
+            var devtools = { open: false, orientation: null };
+            var threshold = 160;
+            var emitEvent = function(state, orientation) {
+                window.dispatchEvent(new CustomEvent('devtoolschange', {
+                    detail: { open: state, orientation: orientation }
+                }));
+            };
+
+            setInterval(function() {
+                var widthThreshold = window.outerWidth - window.innerWidth > threshold;
+                var heightThreshold = window.outerHeight - window.innerHeight > threshold;
+                var orientation = widthThreshold ? 'vertical' : 'horizontal';
+
+                if (!(heightThreshold && widthThreshold) &&
+                    ((window.Firebug && window.Firebug.chrome && window.Firebug.chrome.isInitialized) || widthThreshold || heightThreshold)) {
+                    if (!devtools.open || devtools.orientation !== orientation) {
+                        emitEvent(true, orientation);
+                    }
+                    devtools.open = true;
+                    // Nếu mở Devtool -> Xóa nội dung body hoặc hiện cảnh báo
+                    document.body.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100vh;background:black;color:red;font-size:20px;font-weight:bold;">HỆ THỐNG BẢO MẬT ĐÃ KÍCH HOẠT<br>Vui lòng tắt F12 để tiếp tục.</div>';
+                } else {
+                    if (devtools.open) {
+                        emitEvent(false, null);
+                        // Reload trang nếu đóng Devtool
+                        window.location.reload(); 
+                    }
+                    devtools.open = false;
+                }
+            }, 500);
+        })();
+    </script>
+    <!-- =============================================== -->
+
     <script>
         tailwind.config = {
             theme: {
@@ -46,7 +106,7 @@
     </script>
 
     <style>
-        body { background-color: #050505; color: #ffffff; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #050505; color: #ffffff; overflow-x: hidden; -webkit-tap-highlight-color: transparent; user-select: none; /* Không cho bôi đen text */ }
         
         .text-gradient-gold {
             background: linear-gradient(to right, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
@@ -1168,78 +1228,15 @@
             });
         }
 
-        // --- HÀM XỬ LÝ GET APPLE ID (ĐÃ CẬP NHẬT 9 BƯỚC + ẢNH) ---
+        // --- HÀM XỬ LÝ GET APPLE ID ---
         window.showAppleIdOptions = function() {
             Swal.fire({
-                title: '<strong style="color: #fff; font-size: 1.5rem;">HƯỚNG DẪN LẤY APPLE ID</strong>',
+                title: '<strong style="color: #fff">Chọn thông tin cần Copy</strong>',
                 background: '#1e1e1e',
-                width: '100%',
-                maxWidth: '600px',
                 html: `
-                    <div style="text-align: left; color: #d1d5db; max-height: 60vh; overflow-y: auto; padding-right: 10px;">
-                        
-                        <!-- Bước 1 -->
-                        <div style="margin-bottom: 20px;">
-                            <p style="color: #D4AF37; font-weight: bold; margin-bottom: 8px;">Bước 1: Vào App Store</p>
-                            <img src="step1.jpg" style="width: 100%; border-radius: 10px; border: 1px solid #444;" alt="Ảnh minh họa bước 1">
-                        </div>
-
-                        <!-- Bước 2 -->
-                        <div style="margin-bottom: 20px;">
-                            <p style="color: #D4AF37; font-weight: bold; margin-bottom: 8px;">Bước 2: Ấn Vào Hình Tài Khoản (Góc Phải)</p>
-                            <img src="step2.jpg" style="width: 100%; border-radius: 10px; border: 1px solid #444;" alt="Ảnh minh họa bước 2">
-                        </div>
-
-                        <!-- Bước 3 -->
-                        <div style="margin-bottom: 20px;">
-                            <p style="color: #D4AF37; font-weight: bold; margin-bottom: 8px;">Bước 3: Kéo Xuống Cuối Cùng Chọn Đăng Xuất</p>
-                            <img src="step3.jpg" style="width: 100%; border-radius: 10px; border: 1px solid #444;" alt="Ảnh minh họa bước 3">
-                        </div>
-
-                        <!-- Bước 4 -->
-                        <div style="margin-bottom: 20px;">
-                            <p style="color: #D4AF37; font-weight: bold; margin-bottom: 8px;">Bước 4: Ấn Vào Đăng nhập bằng Tài khoản Apple</p>
-                            <img src="step4.jpg" style="width: 100%; border-radius: 10px; border: 1px solid #444;" alt="Ảnh minh họa bước 4">
-                        </div>
-
-                        <!-- Bước 5 -->
-                        <div style="margin-bottom: 20px;">
-                            <p style="color: #D4AF37; font-weight: bold; margin-bottom: 8px;">Bước 5: Chọn Mục "Không Phải Là [Tên Bạn]"</p>
-                            <img src="step5.jpg" style="width: 100%; border-radius: 10px; border: 1px solid #444;" alt="Ảnh minh họa bước 5">
-                        </div>
-
-                        <!-- Bước 6 (Quan Trọng - Copy) -->
-                        <div style="margin-bottom: 20px; background: rgba(212, 175, 55, 0.1); padding: 15px; border-radius: 15px; border: 1px solid rgba(212, 175, 55, 0.3);">
-                            <p style="color: #D4AF37; font-weight: bold; margin-bottom: 12px; text-transform: uppercase;">Bước 6: Sao Chép Tài Khoản</p>
-                            <div style="display: flex; flex-direction: column; gap: 10px;">
-                                <button id="copy-apple-id" class="swal2-confirm swal2-styled" style="width: 100%; margin: 0; background-color: #333; border: 1px solid #555; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                                    <i class="fa-regular fa-copy"></i> Copy ID Apple
-                                </button>
-                                <button id="copy-apple-pass" class="swal2-confirm swal2-styled" style="width: 100%; margin: 0; background-color: #333; border: 1px solid #555; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                                    <i class="fa-solid fa-key"></i> Copy Password
-                                </button>
-                            </div>
-                            <p style="font-size: 10px; color: #aaa; margin-top: 8px; text-align: center;">*Quay lại App Store và dán vào ô đăng nhập</p>
-                        </div>
-
-                        <!-- Bước 7 -->
-                        <div style="margin-bottom: 20px;">
-                            <p style="color: #D4AF37; font-weight: bold; margin-bottom: 8px;">Bước 7: Bấm Tiếp Tục -> Chọn "Các Lựa Chọn Khác"</p>
-                            <img src="step7.jpg" style="width: 100%; border-radius: 10px; border: 1px solid #444;" alt="Ảnh minh họa bước 7">
-                        </div>
-
-                        <!-- Bước 8 -->
-                        <div style="margin-bottom: 20px;">
-                            <p style="color: #D4AF37; font-weight: bold; margin-bottom: 8px;">Bước 8: Chọn "Không Nâng Cấp"</p>
-                            <img src="step8.jpg" style="width: 100%; border-radius: 10px; border: 1px solid #444;" alt="Ảnh minh họa bước 8">
-                        </div>
-
-                        <!-- Bước 9 -->
-                        <div style="margin-bottom: 10px;">
-                            <p style="color: #D4AF37; font-weight: bold; margin-bottom: 8px;">Bước 9: Tìm và Tải App Shadowrocket</p>
-                            <img src="step9.jpg" style="width: 100%; border-radius: 10px; border: 1px solid #444;" alt="Ảnh minh họa bước 9">
-                        </div>
-
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <button id="copy-apple-id" class="swal2-confirm swal2-styled" style="width: 100%; margin: 0; background-color: #333; border: 1px solid #555;">Copy ID APPLE</button>
+                        <button id="copy-apple-pass" class="swal2-confirm swal2-styled" style="width: 100%; margin: 0; background-color: #333; border: 1px solid #555;">Copy PASSWORD</button>
                     </div>
                 `,
                 showConfirmButton: false,
