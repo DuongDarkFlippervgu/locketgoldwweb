@@ -494,9 +494,10 @@
                                 <thead class="text-gray-400 bg-black/20 sticky top-0 backdrop-blur-md z-10">
                                     <tr>
                                         <th class="p-3 rounded-tl-lg">Key Code</th>
+                                        <th class="p-3">Ngày Tạo</th> <!-- CỘT MỚI -->
                                         <th class="p-3">IP</th>
                                         <th class="p-3">Device</th>
-                                        <th class="p-3">Đã Dùng</th> <!-- Cột Mới: Thời Gian Sử Dụng -->
+                                        <th class="p-3">Đã Dùng</th>
                                         <th class="p-3">Mã 2FA</th>
                                         <th class="p-3">Hành động</th>
                                     </tr>
@@ -572,16 +573,68 @@
             }
         }
 
-        // Hàm phát hiện loại máy
-        function getDeviceModel() {
-            const ua = navigator.userAgent;
-            let device = "PC";
-            if(/Android/i.test(ua)) device = "Android";
-            else if(/iPhone/i.test(ua)) device = "iPhone";
-            else if(/iPad/i.test(ua)) device = "iPad";
-            else if(/Mac/i.test(ua)) device = "Mac";
-            else if(/Windows/i.test(ua)) device = "Windows";
-            return device;
+        // --- HÀM MỚI: NHẬN DIỆN CHI TIẾT THIẾT BỊ (SIÊU CẤP VIP PRO) ---
+        function getDetailedDeviceModel() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            
+            // Check Android
+            if (/android/i.test(ua)) {
+                // Thử bóc tách tên máy từ User Agent
+                const match = ua.match(/Android.*?; (\w+)\s(\w+)\s/);
+                return match ? `Android (${match[1]} ${match[2]})` : "Android Device";
+            }
+
+            // Check iOS
+            if (/iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+                if (window.MSStream) return "iOS Device (IE)";
+
+                // Lấy thông số màn hình
+                const width = window.screen.width;
+                const height = window.screen.height;
+                const ratio = window.devicePixelRatio || 1;
+                
+                // Sắp xếp để tránh lỗi xoay ngang
+                const min = Math.min(width, height);
+                const max = Math.max(width, height);
+
+                if (/iPhone/.test(ua)) {
+                    // CÁC DÒNG CŨ
+                    if (min === 320 && max === 568) return "iPhone 5/5S/SE1";
+                    if (min === 375 && max === 667) return "iPhone 6/7/8/SE2/SE3";
+                    if (min === 414 && max === 736) return "iPhone 6+/7+/8+";
+                    
+                    // CÁC DÒNG TAI THỎ / FACE ID
+                    if (min === 375 && max === 812) {
+                        return (ratio === 3) ? "iPhone X/XS/11Pro" : "iPhone 12Mini/13Mini"; // Mini đôi khi báo ảo, nhưng X/XS/11Pro chắc chắn ratio=3
+                    }
+
+                    if (min === 414 && max === 896) {
+                        return (ratio === 2) ? "iPhone XR/11" : "iPhone XS Max/11 Pro Max";
+                    }
+
+                    if (min === 390 && max === 844) return "iPhone 12/13/14"; 
+                    if (min === 428 && max === 926) return "iPhone 12ProMax/13ProMax/14Plus";
+                    
+                    // CÁC DÒNG DYNAMIC ISLAND (MỚI NHẤT)
+                    if (min === 393 && max === 852) return "iPhone 14Pro/15/15Pro/16";
+                    if (min === 430 && max === 932) return "iPhone 14ProMax/15Plus/15ProMax/16Plus";
+
+                    // KHÔNG TÌM THẤY -> TRẢ VỀ KÍCH THƯỚC ĐỂ DEBUG
+                    return `iPhone (Unknown: ${min}x${max})`;
+                }
+                
+                if (/iPad/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+                    return `iPad (${min}x${max})`;
+                }
+                
+                return "iOS Device";
+            }
+            
+            // Desktop
+            if (/Mac/i.test(ua)) return "MacBook/iMac";
+            if (/Windows/i.test(ua)) return "Windows PC";
+            
+            return "Unknown Device";
         }
         // -------------------
 
@@ -689,10 +742,14 @@
 
                 const keyData = keySnap.data();
                 const userIP = await getClientIP();
-                const userDevice = getDeviceModel();
+                
+                // --- SỬ DỤNG HÀM DETECT MỚI ---
+                const userDevice = getDetailedDeviceModel();
+                // -----------------------------
 
                 if (keyData.isUsed) {
                     if (keyData.deviceId === currentDeviceID) {
+                        // Cập nhật lại thời gian sử dụng gần nhất nếu cần (tùy chọn, ở đây mình chỉ check)
                         // OK -> Lấy Link Module về
                         await fetchModuleLink();
                         window.currentUserKey = inputKey;
@@ -707,7 +764,7 @@
                         deviceId: currentDeviceID, 
                         usedAt: new Date().toISOString(),
                         ip: userIP,
-                        deviceType: userDevice
+                        deviceType: userDevice // Lưu tên thiết bị chi tiết vào DB
                     });
                     
                     // Lần đầu kích hoạt -> Cũng lấy link module về
@@ -860,46 +917,103 @@
             }
         }
 
+        // --- MẢNG LƯU TRỮ DỮ LIỆU KEY ĐỂ RENDER LIÊN TỤC ---
+        let currentKeysData = []; 
+
+        function calculateRelativeTime(isoString) {
+            if (!isoString) return '-';
+            const date = new Date(isoString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+
+            if (diffMs < 60000) return 'Vừa xong';
+            if (diffHours < 1) return `${diffMins} phút trước`;
+            if (diffDays < 1) return `${diffHours} giờ trước`;
+            return `${diffDays} ngày trước`;
+        }
+
+        function formatDateTime(isoString) {
+            if (!isoString) return '<span class="text-gray-600 text-[10px]">N/A</span>';
+            const date = new Date(isoString);
+            // Định dạng: 14:30 25/12
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            return `<span class="text-xs text-gray-300">${hours}:${minutes} <br> <span class="text-[10px] text-gray-500">${day}/${month}</span></span>`;
+        }
+
+        function renderKeysTable() {
+            const tbody = document.getElementById('key-table-body');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+
+            // Sắp xếp
+            currentKeysData.sort((a, b) => {
+                // Ưu tiên 1: Đã dùng lên đầu
+                if (a.isUsed && !b.isUsed) return -1;
+                if (!a.isUsed && b.isUsed) return 1;
+
+                // Ưu tiên 2: Nếu cả 2 đều đã dùng, so sánh thời gian dùng (Mới nhất lên đầu)
+                if (a.isUsed && b.isUsed) {
+                    const timeA = a.usedAt ? new Date(a.usedAt).getTime() : 0;
+                    const timeB = b.usedAt ? new Date(b.usedAt).getTime() : 0;
+                    return timeB - timeA; // Giảm dần
+                }
+
+                // Ưu tiên 3: Nếu cả 2 chưa dùng, so sánh thời gian tạo (Mới nhất lên đầu)
+                const createA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+                const createB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+                return createB - createA;
+            });
+
+            currentKeysData.forEach((k) => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-b border-gray-800 hover:bg-white/5 transition';
+                
+                // Tính thời gian đã sử dụng
+                let usedTimeDisplay = '-';
+                if (k.isUsed && k.usedAt) {
+                    usedTimeDisplay = calculateRelativeTime(k.usedAt);
+                }
+
+                tr.innerHTML = `
+                    <td class="p-3 font-mono text-gold-300 font-bold">${k.code}</td>
+                    <td class="p-3">${formatDateTime(k.createdAt)}</td> <!-- Cột Ngày Tạo -->
+                    <td class="p-3 text-gray-400 text-xs">${k.ip || 'N/A'}</td>
+                    <td class="p-3 text-gold-400 text-xs font-bold">${k.deviceType || 'N/A'}</td>
+                    <td class="p-3 text-gray-300 text-xs italic">${usedTimeDisplay}</td>
+                    <td class="p-3 font-mono text-green-400">${k.apple2FA || '-'}</td>
+                    <td class="p-3 text-right flex gap-2 justify-end">
+                        <button onclick="send2FAForKey('${k.code}')" class="text-green-500 hover:text-green-300 p-1 border border-green-500 rounded px-2 text-xs font-bold">GỬI 2FA</button>
+                        <button onclick="deleteKeyCloud('${k.code}')" class="text-red-500 hover:text-red-300 p-1 border border-red-500 rounded px-2 text-xs"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Set interval để re-render lại thời gian mỗi 30 giây (để cập nhật "x phút trước")
+        setInterval(() => {
+            if(document.getElementById('view-admin').classList.contains('active')) {
+                renderKeysTable();
+            }
+        }, 30000);
+
         function listenKeysRealtime() {
             try {
-                const q = query(collection(db, "keys"), orderBy("createdAt", "desc"));
+                const q = query(collection(db, "keys"));
+                
                 onSnapshot(q, (snapshot) => {
-                    const tbody = document.getElementById('key-table-body');
-                    tbody.innerHTML = '';
-                    snapshot.forEach((doc) => {
-                        const k = doc.data();
-                        
-                        const tr = document.createElement('tr');
-                        tr.className = 'border-b border-gray-800 hover:bg-white/5 transition';
-                        
-                        // Tính thời gian đã sử dụng
-                        let usedTimeDisplay = '-';
-                        if (k.isUsed && k.usedAt) {
-                            const usedDate = new Date(k.usedAt);
-                            const now = new Date();
-                            const diffMs = now - usedDate;
-                            const diffMins = Math.floor(diffMs / 60000);
-                            const diffHours = Math.floor(diffMs / 3600000);
-                            const diffDays = Math.floor(diffMs / 86400000);
-
-                            if (diffDays > 0) usedTimeDisplay = `${diffDays} ngày trước`;
-                            else if (diffHours > 0) usedTimeDisplay = `${diffHours} giờ trước`;
-                            else usedTimeDisplay = `${diffMins} phút trước`;
-                        }
-
-                        tr.innerHTML = `
-                            <td class="p-3 font-mono text-gold-300 font-bold">${k.code}</td>
-                            <td class="p-3 text-gray-400 text-xs">${k.ip || 'N/A'}</td>
-                            <td class="p-3 text-gold-400 text-xs font-bold">${k.deviceType || 'N/A'}</td>
-                            <td class="p-3 text-gray-300 text-xs italic">${usedTimeDisplay}</td>
-                            <td class="p-3 font-mono text-green-400">${k.apple2FA || '-'}</td>
-                            <td class="p-3 text-right flex gap-2 justify-end">
-                                <button onclick="send2FAForKey('${k.code}')" class="text-green-500 hover:text-green-300 p-1 border border-green-500 rounded px-2 text-xs font-bold">GỬI 2FA</button>
-                                <button onclick="deleteKeyCloud('${k.code}')" class="text-red-500 hover:text-red-300 p-1 border border-red-500 rounded px-2 text-xs"><i class="fa-solid fa-trash"></i></button>
-                            </td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
+                    // Cập nhật dữ liệu mới nhất vào biến toàn cục
+                    currentKeysData = [];
+                    snapshot.forEach(doc => currentKeysData.push(doc.data()));
+                    
+                    // Render ngay lập tức khi có dữ liệu mới
+                    renderKeysTable();
                 }, (error) => { console.error("Realtime Error", error); });
             } catch(e) { console.error(e); }
         }
