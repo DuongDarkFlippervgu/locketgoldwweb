@@ -749,8 +749,14 @@
 
                 if (keyData.isUsed) {
                     if (keyData.deviceId === currentDeviceID) {
-                        // Cập nhật lại thời gian sử dụng gần nhất nếu cần (tùy chọn, ở đây mình chỉ check)
-                        // OK -> Lấy Link Module về
+                        
+                        // --- CẬP NHẬT ĐỂ TEST BOT (KHI LOGIN LẠI CŨNG BÁO) ---
+                        // NẾU BẠN MUỐN TẮT TÍNH NĂNG BÁO KHI LOGIN LẠI, HÃY XÓA DÒNG "notified: false" Ở DƯỚI
+                        await updateDoc(keyRef, {
+                            notified: false // Đánh dấu chưa báo để Bot quét lại
+                        });
+                        // ----------------------------------------------------
+
                         await fetchModuleLink();
                         window.currentUserKey = inputKey;
                         showDownloadPage();
