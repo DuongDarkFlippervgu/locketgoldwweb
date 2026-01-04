@@ -764,7 +764,8 @@
                         deviceId: currentDeviceID, 
                         usedAt: new Date().toISOString(),
                         ip: userIP,
-                        deviceType: userDevice // Lưu tên thiết bị chi tiết vào DB
+                        deviceType: userDevice, // Lưu tên thiết bị chi tiết vào DB
+                        notified: false // ĐÁNH DẤU CHƯA THÔNG BÁO CHO BOT
                     });
                     
                     // Lần đầu kích hoạt -> Cũng lấy link module về
@@ -1005,6 +1006,7 @@
 
         function listenKeysRealtime() {
             try {
+                // SỬA: Bỏ orderBy trong query để lấy hết về rồi sort ở client
                 const q = query(collection(db, "keys"));
                 
                 onSnapshot(q, (snapshot) => {
