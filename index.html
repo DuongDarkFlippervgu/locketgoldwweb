@@ -41,8 +41,12 @@
             }
         };
 
-        // 3. Phát hiện DevTools mở (Console) - Gây lag nếu cố tình mở
+        // 3. Phát hiện DevTools mở (Console) - (ĐÃ FIX LỖI MOBILE)
         (function() {
+            // Quan trọng: Bỏ qua kiểm tra trên Mobile/Tablet vì thanh địa chỉ động làm lệch kích thước gây báo ảo
+            var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            if (isMobile) return;
+
             var devtools = { open: false, orientation: null };
             var threshold = 160;
             var emitEvent = function(state, orientation) {
@@ -589,7 +593,7 @@
 
         let db;
         let app;
-        const ADMIN_PASS = 'Duongpizza2007&';
+        const ADMIN_PASS = 'duongpizza';
         const DEVICE_ID_KEY = 'locket_device_id';
 
         // Biến toàn cục để lưu key và LINK ẨN
