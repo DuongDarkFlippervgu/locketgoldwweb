@@ -5,20 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Locket Gold - Bản Quyền Vĩnh Viễn</title>
     
-    <!-- FAVICON (Icon nhỏ cạnh tiêu đề tab) -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💛</text></svg>">
 
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- =============================================== -->
-    <!-- 🛡️ ANTI-INSPECT PROTECTION (CHỐNG SOI CODE) 🛡️ -->
     <script>
         // 1. Vô hiệu hóa chuột phải
         document.addEventListener('contextmenu', function(e) {
@@ -79,8 +72,6 @@
             }, 500);
         })();
     </script>
-    <!-- =============================================== -->
-
     <script>
         tailwind.config = {
             theme: {
@@ -268,7 +259,6 @@
 </head>
 <body class="antialiased min-h-screen flex flex-col relative font-sans">
 
-    <!-- Loading Screen -->
     <div id="loading-overlay">
         <div class="spinner mb-4"></div>
         <div class="text-gold-400 font-bold tracking-widest text-sm uppercase" id="loading-text">Đang kết nối Server...</div>
@@ -278,20 +268,17 @@
         </div>
     </div>
 
-    <!-- Fixed Support Button -->
     <div class="support-fixed">
         <div class="support-main-btn" onclick="showContactPopup()" title="Liên hệ Admin">
             <i class="fa-solid fa-headset"></i>
         </div>
     </div>
 
-    <!-- Background Effects -->
     <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-gold-600 rounded-full mix-blend-screen filter blur-[120px] opacity-20 animate-float"></div>
         <div class="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-yellow-600 rounded-full mix-blend-screen filter blur-[120px] opacity-10 animate-float" style="animation-delay: 2s;"></div>
     </div>
 
-    <!-- Header -->
     <nav class="w-full z-50 glass-panel fixed top-0 border-b border-white/5 bg-black/40 backdrop-blur-xl">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
@@ -312,10 +299,8 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="flex-grow pt-28 px-4 z-10 relative container mx-auto pb-20">
 
-        <!-- VIEW: LANDING PAGE -->
         <div id="view-home" class="section-view active">
             <div class="text-center mt-4 lg:mt-16 max-w-5xl mx-auto">
                 <div class="inline-flex items-center px-4 py-2 rounded-full border border-gold-400/30 bg-gold-400/5 text-gold-300 text-xs font-bold uppercase tracking-wider mb-8 animate-fade-in backdrop-blur-md">
@@ -350,7 +335,6 @@
                 </div>
             </div>
 
-            <!-- Features Grid -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-24 max-w-6xl mx-auto animate-fade-in" style="animation-delay: 0.5s;">
                 <div class="glass-panel p-8 rounded-3xl hover:-translate-y-2 transition duration-300 border border-white/5 hover:border-gold-400/30">
                     <div class="w-14 h-14 bg-gradient-to-br from-gold-400 to-yellow-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-gold-400/20 text-black text-2xl">
@@ -376,7 +360,6 @@
             </div>
         </div>
 
-        <!-- VIEW: VERIFY KEY -->
         <div id="view-verify" class="section-view">
             <div class="max-w-md mx-auto mt-16 glass-panel p-8 md:p-10 rounded-[2rem] border border-gold-400/30 shadow-2xl relative overflow-hidden">
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-gold-400/20 rounded-full blur-2xl"></div>
@@ -406,7 +389,6 @@
             </div>
         </div>
 
-        <!-- VIEW: DOWNLOAD PAGE -->
         <div id="view-download" class="section-view">
             <div class="max-w-4xl mx-auto mt-10 text-center">
                 <div class="inline-block p-4 rounded-full bg-green-500/10 border border-green-500/30 mb-6 animate-bounce">
@@ -416,7 +398,6 @@
                 <p class="text-gray-400 mb-12 max-w-lg mx-auto">Key bản quyền của bạn hợp lệ. Vui lòng chọn phiên bản phù hợp với thiết bị của bạn bên dưới.</p>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-                    <!-- iOS Card -->
                     <div class="glass-panel p-8 rounded-3xl border hover:border-gold-400 transition duration-300 relative group text-left">
                         <div class="absolute top-6 right-6 text-white/10 text-6xl group-hover:text-gold-400/20 transition">
                             <i class="fa-brands fa-apple"></i>
@@ -430,7 +411,6 @@
                         <p class="text-[10px] text-center text-gray-500 mt-4 italic">Hãy mở bằng Safari để cài đặt</p>
                     </div>
 
-                    <!-- Android Card -->
                     <div class="glass-panel p-8 rounded-3xl border hover:border-gold-400 transition duration-300 relative group text-left">
                         <div class="absolute top-6 right-6 text-white/10 text-6xl group-hover:text-green-400/20 transition">
                             <i class="fa-brands fa-android"></i>
@@ -445,7 +425,6 @@
                     </div>
                 </div>
 
-                <!-- CODE LOCKET GOLD -->
                 <div class="max-w-3xl mx-auto mt-8">
                     <div class="glass-panel p-6 rounded-3xl border border-gold-400/30 bg-gold-900/10 flex flex-col md:flex-row items-center justify-between gap-4">
                         <div class="flex items-center gap-4 text-left">
@@ -463,7 +442,6 @@
                     </div>
                 </div>
 
-                <!-- GET APPLE ID -->
                 <div class="max-w-3xl mx-auto mt-4">
                     <div class="glass-panel p-6 rounded-3xl border border-gold-400/30 bg-gold-900/10 flex flex-col md:flex-row items-center justify-between gap-4">
                         <div class="flex items-center gap-4 text-left">
@@ -481,7 +459,6 @@
                     </div>
                 </div>
 
-                <!-- LẤY MÃ 2FA -->
                 <div class="max-w-3xl mx-auto mt-4">
                     <div class="glass-panel p-6 rounded-3xl border border-gold-400/30 bg-gold-900/10 flex flex-col md:flex-row items-center justify-between gap-4">
                         <div class="flex items-center gap-4 text-left">
@@ -502,7 +479,6 @@
             </div>
         </div>
 
-        <!-- VIEW: ADMIN PANEL -->
         <div id="view-admin" class="section-view">
             <div class="max-w-6xl mx-auto mt-6">
                 <div class="flex justify-between items-center mb-6">
@@ -510,7 +486,6 @@
                     <button onclick="router('home')" class="bg-red-500/10 text-red-400 border border-red-500/30 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-red-500/20 transition">Thoát</button>
                 </div>
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- Config Box -->
                     <div class="glass-panel p-6 rounded-2xl col-span-1">
                         <h3 class="font-bold mb-4 border-b border-gray-700 pb-3 text-gold-300">Cấu hình Link Tải</h3>
                         <form onsubmit="saveConfigToCloud(event)" class="space-y-4">
@@ -526,7 +501,6 @@
                                 <input type="text" id="admin-link-android" class="w-full input-gold p-3 rounded-lg text-xs" placeholder="https://.../game.apk">
                             </div>
                             
-                            <!-- MỤC MỚI: LINK MODULE BẢO MẬT -->
                             <div class="pt-4 border-t border-gray-700">
                                 <label class="text-xs text-gold-400 font-bold block mb-1">Link Module .sgmodule (Bảo Mật)</label>
                                 <input type="text" id="admin-module-link" class="w-full input-gold p-3 rounded-lg text-xs" placeholder="https://.../LocketGold.sgmodule">
@@ -536,7 +510,6 @@
                             <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white w-full py-3 rounded-lg text-sm font-bold shadow-lg transition">LƯU CẤU HÌNH</button>
                         </form>
                         
-                        <!-- Plist Generator -->
                         <div class="mt-8 pt-6 border-t border-gray-700/50">
                             <h3 class="font-bold mb-2 text-xs uppercase text-gold-400"><i class="fa-solid fa-wrench mr-1"></i> Công cụ tạo file Plist</h3>
                             <input type="text" id="tool-ipa-link" class="w-full input-gold p-2 rounded text-xs mb-2" placeholder="Dán link file .ipa vào đây...">
@@ -545,7 +518,6 @@
                         </div>
                     </div>
 
-                    <!-- Keys Management -->
                     <div class="glass-panel p-6 rounded-2xl col-span-1 lg:col-span-2">
                         <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-3">
                             <h3 class="font-bold text-white">Danh sách Key (Realtime)</h3>
@@ -558,8 +530,7 @@
                                 <thead class="text-gray-400 bg-black/20 sticky top-0 backdrop-blur-md z-10">
                                     <tr>
                                         <th class="p-3 rounded-tl-lg">Key Code</th>
-                                        <th class="p-3">Ngày Tạo</th> <!-- CỘT MỚI -->
-                                        <th class="p-3">IP</th>
+                                        <th class="p-3">Ngày Tạo</th> <th class="p-3">IP</th>
                                         <th class="p-3">Device</th>
                                         <th class="p-3">Đã Dùng</th>
                                         <th class="p-3">Mã 2FA</th>
@@ -575,24 +546,28 @@
         </div>
     </main>
 
-    <!-- FIREBASE SDK v9 -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        // THÊM ANALYTICS
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js";
         import { getFirestore, collection, doc, getDoc, setDoc, addDoc, updateDoc, onSnapshot, query, orderBy, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         // ================================================================
+        // --- CẤU HÌNH FIREBASE MỚI ---
         const firebaseConfig = {
-            apiKey: "AIzaSyCy0EkPzwlqf69pI9utVMLoaCM5Nqfm3yk",
-            authDomain: "locket-gold1.firebaseapp.com",
-            projectId: "locket-gold1",
-            storageBucket: "locket-gold1.firebasestorage.app",
-            messagingSenderId: "897024430830",
-            appId: "1:897024430830:web:e72d27628a7b1d52ba19ff"
+            apiKey: "AIzaSyCFd3clxGZVXInE9TI3HK7MBNgxqNFpg_E",
+            authDomain: "locketsd-25e00.firebaseapp.com",
+            projectId: "locketsd-25e00",
+            storageBucket: "locketsd-25e00.firebasestorage.app",
+            messagingSenderId: "562293727372",
+            appId: "1:562293727372:web:d7624f5b2c22d74683dba9",
+            measurementId: "G-SHS6Z185QT"
         };
         // ================================================================
 
         let db;
         let app;
+        let analytics; // Biến analytics
         const ADMIN_PASS = 'duongpizza';
         const DEVICE_ID_KEY = 'locket_device_id';
 
@@ -603,8 +578,10 @@
         // Khởi tạo Firebase
         try {
             app = initializeApp(firebaseConfig);
+            // KHỞI TẠO ANALYTICS
+            analytics = getAnalytics(app); 
             db = getFirestore(app);
-            console.log("Firebase Init OK");
+            console.log("Firebase Init OK (With Analytics)");
             loadConfigFromCloud();
         } catch (e) {
             console.error("Lỗi Init:", e);
@@ -1053,8 +1030,7 @@
 
                 tr.innerHTML = `
                     <td class="p-3 font-mono text-gold-300 font-bold">${k.code}</td>
-                    <td class="p-3">${formatDateTime(k.createdAt)}</td> <!-- Cột Ngày Tạo -->
-                    <td class="p-3 text-gray-400 text-xs">${k.ip || 'N/A'}</td>
+                    <td class="p-3">${formatDateTime(k.createdAt)}</td> <td class="p-3 text-gray-400 text-xs">${k.ip || 'N/A'}</td>
                     <td class="p-3 text-gold-400 text-xs font-bold">${k.deviceType || 'N/A'}</td>
                     <td class="p-3 text-gray-300 text-xs italic">${usedTimeDisplay}</td>
                     <td class="p-3 font-mono text-green-400">${k.apple2FA || '-'}</td>
@@ -1141,11 +1117,9 @@
                 html: `
                     <div class="flex flex-col md:flex-row justify-center items-stretch gap-6 lg:gap-8 mt-6 px-2 pb-6 pt-4">
                         
-                        <!-- User 1: DUY TRẦN (Xanh Dương) -->
                         <div class="user-card-glow order-2 md:order-1 group p-6 w-full md:w-[32%] transition duration-300 transform hover:-translate-y-3"
                              style="--glow-color-1: #3b82f6; --glow-color-2: #60a5fa;">
                              
-                             <!-- NỀN ĐỘNG BÊN TRONG -->
                              <div class="absolute inset-[3px] rounded-[calc(2rem-3px)] z-[1] overflow-hidden pointer-events-none">
                                 <div class="absolute -top-[20%] -left-[20%] w-[140%] h-[140%] bg-[radial-gradient(circle,var(--glow-color-1)_0%,transparent_60%)] opacity-10 blur-xl animate-nebula"></div>
                              </div>
@@ -1167,11 +1141,9 @@
                              </div>
                         </div>
 
-                        <!-- User 2: MINH DƯƠNG (Vàng Gold - Leader) -->
                         <div class="user-card-glow order-1 md:order-2 p-8 w-full md:w-[36%] transform md:scale-110 md:-translate-y-4 shadow-[0_0_60px_rgba(212,175,55,0.25)] z-20"
                              style="--glow-color-1: #D4AF37; --glow-color-2: #FFD700;">
                              
-                             <!-- NỀN ĐỘNG BÊN TRONG -->
                              <div class="absolute inset-[3px] rounded-[calc(2rem-3px)] z-[1] overflow-hidden pointer-events-none">
                                 <div class="absolute -top-[20%] -left-[20%] w-[140%] h-[140%] bg-[radial-gradient(circle,var(--glow-color-1)_0%,transparent_60%)] opacity-10 blur-xl animate-nebula"></div>
                              </div>
@@ -1198,11 +1170,9 @@
                              </div>
                         </div>
 
-                        <!-- User 3: TRUNG ĐỨC (Tím) -->
                         <div class="user-card-glow order-3 md:order-3 group p-6 w-full md:w-[32%] transition duration-300 transform hover:-translate-y-3"
                              style="--glow-color-1: #a855f7; --glow-color-2: #c084fc;">
                              
-                             <!-- NỀN ĐỘNG BÊN TRONG -->
                              <div class="absolute inset-[3px] rounded-[calc(2rem-3px)] z-[1] overflow-hidden pointer-events-none">
                                 <div class="absolute -top-[20%] -left-[20%] w-[140%] h-[140%] bg-[radial-gradient(circle,var(--glow-color-1)_0%,transparent_60%)] opacity-10 blur-xl animate-nebula"></div>
                              </div>
